@@ -1,0 +1,21 @@
+
+#template_name:queryUserFansUsingGET_1
+#SubscribeController,get,/api/queryUserFans
+#根据用户ID查询订阅粉丝
+操作成功,正确的id.case01:
+    uid: 20162846
+    pageIndex: 1
+    pageSize: 20
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"hasNextPage\":false,\"hasPreviousPage\":false,\"pageDatas\":[],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":0,\"totalPages\":0}"
+    subCode: null
+
+操作失败,错误的id.case01:
+    uid: 10162846
+    pageIndex: 1
+    pageSize: 20
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

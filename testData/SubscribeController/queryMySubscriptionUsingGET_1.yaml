@@ -1,0 +1,17 @@
+
+#template_name:queryMySubscriptionUsingGET_1
+#SubscribeController,get,/api/queryMySubscription
+#查询我的普通订阅
+操作成功,正确的id.case01:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null
+
+操作失败,错误的id.case01:
+    uid: 10162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

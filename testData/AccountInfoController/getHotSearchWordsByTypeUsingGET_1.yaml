@@ -1,0 +1,27 @@
+
+#template_name:getHotSearchWordsByTypeUsingGET_1
+#AccountInfoController,get,/api/getHotSearchWordsByType
+#获取指定类型热搜词列表
+搜索类型为1，默认.case01:
+    searchType: 1
+    topSize: 9
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[\"我的\",\"么墨子\",\"A\",\"小法师\",\"H\",\"testniuren\",\"0525\",\"11\",\"小\"]"
+    subCode: null
+
+搜索类型为0，不存在.case02:
+    searchType: 0
+    topSize: 9
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null
+
+搜索类型为1，其它.case02:
+    searchType: 1
+    topSize: 10
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[\"我的\",\"么墨子\",\"A\",\"小法师\",\"H\",\"testniuren\",\"0525\",\"11\",\"小\"]"
+    subCode: null

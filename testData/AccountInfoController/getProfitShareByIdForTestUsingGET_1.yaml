@@ -1,0 +1,14 @@
+
+#template_name:getProfitShareByIdForTestUsingGET_1
+#AccountInfoController,get,/api/getProfitShareByIdForTest
+#今日盈亏分享(给测试用)
+test.case01:
+    pLRate:
+    closedPL:
+    orders:
+    lots:
+    exPosition:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

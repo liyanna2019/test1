@@ -1,0 +1,17 @@
+
+#template_name:getBrokerServerListUsingGET_1
+#BrokerInfoController,get,/api/getBrokerServerList
+#根据经济商ID查询所有该经济商服务器列表
+操作成功,正确的id.case01:
+    id: 24
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"Id\":220,\"BrokerId\":24,\"ServerName\":\"Activtrades-1\",\"ServerUrl\":\"13.94.200.192:4443\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-1.srv\",\"Status\":1},{\"Id\":221,\"BrokerId\":24,\"ServerName\":\"Activtrades-2\",\"ServerUrl\":\"13.94.200.192:443\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-2.srv\",\"Status\":1},{\"Id\":222,\"BrokerId\":24,\"ServerName\":\"Activtrades-3\",\"ServerUrl\":\"13.94.200.192:2443\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-3.srv\",\"Status\":1},{\"Id\":223,\"BrokerId\":24,\"ServerName\":\"Activtrades-4\",\"ServerUrl\":\"13.94.200.192:5443\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-4.srv\",\"Status\":1},{\"Id\":224,\"BrokerId\":24,\"ServerName\":\"Activtrades-5\",\"ServerUrl\":\"13.94.200.192:3443\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-5.srv\",\"Status\":1},{\"Id\":225,\"BrokerId\":24,\"ServerName\":\"Activtrades-Demo\",\"ServerUrl\":\"159.8.17.252\",\"SrvUrl\":\"https://gafiles.fx110.com/upload/files/13/4/2019/02/27/activtrades-demo.srv\",\"Status\":1}]"
+    subCode: null
+
+操作失败,错误的id.case01:
+    id: 2000
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

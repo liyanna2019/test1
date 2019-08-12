@@ -1,0 +1,10 @@
+
+#template_name:getPositionTimeGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getPositionTimeGapList
+#查询指定账户所有历史订单持仓时间图表信息
+test.case01:
+    accountId:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

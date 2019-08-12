@@ -1,0 +1,11 @@
+
+#template_name:cancelReportUsingGET
+#TraderDoctorsController,get,/api/cancelReport
+#取消体检
+test.case01:
+    accountId:
+    id:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

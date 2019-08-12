@@ -1,0 +1,10 @@
+
+#template_name:getAccountsByAppealUidUsingGET_1
+#AccountAppealController,get,/api/getAccountsByAppealUid
+#获取指定用户申诉账号进度信息
+test.case01:
+    appealUid:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

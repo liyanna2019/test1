@@ -1,0 +1,24 @@
+
+#template_name:getSmallAccountByIdsUsingGET_1
+#AccountTradeInfoController,get,/api/getSmallAccountByIds
+#获取指定账号ID集合，对应账户简易信息集合
+操作成功,1个id.case01:
+    accountIds: 4912
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"User\":{\"Uid\":20162846,\"UserName\":\"XD2450022\",\"NickName\":\"whiteww12345\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"TradingMaxims\":\"娃哈哈哈哈\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"AccountId\":4912,\"Uid\":20162846,\"AccountName\":\"922290\",\"AccountNumber\":922290,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"BrokerName\":\"IC Markets\",\"BrokerServerName\":\"ICMarkets-Live08\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":0,\"Index\":2,\"Rank\":42,\"MELevel\":4}]"
+    subCode: null
+
+操作成功,2个id.case02:
+    accountIds: 4912,5307
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"User\":{\"Uid\":20162846,\"UserName\":\"XD2450022\",\"NickName\":\"whiteww12345\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"TradingMaxims\":\"娃哈哈哈哈\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"AccountId\":4912,\"Uid\":20162846,\"AccountName\":\"922290\",\"AccountNumber\":922290,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"BrokerName\":\"IC Markets\",\"BrokerServerName\":\"ICMarkets-Live08\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":0,\"Index\":2,\"Rank\":42,\"MELevel\":4},{\"User\":{\"Uid\":20165656,\"UserName\":\"BX2795115\",\"NickName\":\"0527\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault/41_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault/41_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault/41_60.jpg\",\"TradingMaxims\":\"\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"AccountId\":5307,\"Uid\":20165656,\"AccountName\":\"熊\",\"AccountNumber\":936233,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"BrokerName\":\"IC Markets\",\"BrokerServerName\":\"ICMarkets-Live08\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":1,\"Index\":1,\"Rank\":10,\"MELevel\":3}]"
+    subCode: null
+
+操作失败,1个错误的id.case03:
+    accountIds: 12
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

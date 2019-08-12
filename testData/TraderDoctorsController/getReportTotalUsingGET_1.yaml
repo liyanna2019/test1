@@ -1,0 +1,9 @@
+
+#template_name:getReportTotalUsingGET_1
+#TraderDoctorsController,get,/api/getReportTotal
+#获取体检报告总数
+test.case01:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

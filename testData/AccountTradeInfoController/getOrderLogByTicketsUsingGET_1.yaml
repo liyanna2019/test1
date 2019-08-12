@@ -1,0 +1,31 @@
+
+#template_name:getOrderLogByTicketsUsingGET_1
+#AccountTradeInfoController,get,/api/getOrderLogByTickets
+#根据指定多个订单号获取交易订单通知详情
+操作成功,1个订单号.case01:
+    tickets: 5650489
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"Id\":42239,\"Uid\":20163480,\"AccountId\":4468,\"Ticket\":\"5650489\",\"OrderExchange\":1,\"Symbol\":\"GOLD\",\"Lots\":0.01,\"TradeType\":1,\"OpenPrice\":1248.54000,\"ClosePrice\":1248.77000,\"TP\":0.00000,\"SL\":0.00000,\"OpenTime\":\"2018-12-11 11:56:50\",\"CloseTime\":\"2018-12-11 11:56:57\",\"Profit\":-0.23000,\"User\":{\"Accounts\":[],\"Uid\":20163480,\"UserName\":\"EI2677017\",\"NickName\":\"0525号小法师\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png\",\"TradingMaxims\":\"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言\",\"IsIdentity\":0,\"NiuAuth\":1,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":1,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4468,\"Uid\":20163480,\"AccountName\":\"稳健\",\"AccountNumber\":60024894,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png\",\"BrokerName\":\"FXPRO\",\"BrokerServerName\":\"FxPro.com-Demo06\",\"AccountType\":0,\"AccountCategory\":0,\"AuthStatus\":1,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":1,\"Index\":2,\"Rank\":35,\"MELevel\":5}}]"
+    subCode: null
+
+操作成功,2个订单号.case02:
+    tickets: 5650489,5650519
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"Id\":42246,\"Uid\":20163480,\"AccountId\":4468,\"Ticket\":\"5650519\",\"OrderExchange\":1,\"Symbol\":\"GOLD\",\"Lots\":0.01,\"TradeType\":1,\"OpenPrice\":1248.81000,\"ClosePrice\":1249.05000,\"TP\":0.00000,\"SL\":0.00000,\"OpenTime\":\"2018-12-11 12:00:05\",\"CloseTime\":\"2018-12-11 12:00:07\",\"Profit\":-0.24000,\"User\":{\"Accounts\":[],\"Uid\":20163480,\"UserName\":\"EI2677017\",\"NickName\":\"0525号小法师\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png\",\"TradingMaxims\":\"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言\",\"IsIdentity\":0,\"NiuAuth\":1,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":1,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4468,\"Uid\":20163480,\"AccountName\":\"稳健\",\"AccountNumber\":60024894,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png\",\"BrokerName\":\"FXPRO\",\"BrokerServerName\":\"FxPro.com-Demo06\",\"AccountType\":0,\"AccountCategory\":0,\"AuthStatus\":1,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":1,\"Index\":2,\"Rank\":35,\"MELevel\":5}},{\"Id\":42239,\"Uid\":20163480,\"AccountId\":4468,\"Ticket\":\"5650489\",\"OrderExchange\":1,\"Symbol\":\"GOLD\",\"Lots\":0.01,\"TradeType\":1,\"OpenPrice\":1248.54000,\"ClosePrice\":1248.77000,\"TP\":0.00000,\"SL\":0.00000,\"OpenTime\":\"2018-12-11 11:56:50\",\"CloseTime\":\"2018-12-11 11:56:57\",\"Profit\":-0.23000,\"User\":{\"Accounts\":[],\"Uid\":20163480,\"UserName\":\"EI2677017\",\"NickName\":\"0525号小法师\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png\",\"TradingMaxims\":\"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言\",\"IsIdentity\":0,\"NiuAuth\":1,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":1,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4468,\"Uid\":20163480,\"AccountName\":\"稳健\",\"AccountNumber\":60024894,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png\",\"BrokerName\":\"FXPRO\",\"BrokerServerName\":\"FxPro.com-Demo06\",\"AccountType\":0,\"AccountCategory\":0,\"AuthStatus\":1,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":1,\"Index\":2,\"Rank\":35,\"MELevel\":5}}]"
+    subCode: null
+
+操作失败,1个错误订单号.case03:
+    tickets: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null
+
+操作失败,2个错误订单号.case03:
+    tickets: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

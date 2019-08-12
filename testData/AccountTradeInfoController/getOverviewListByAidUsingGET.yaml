@@ -1,0 +1,12 @@
+
+#template_name:getOverviewListByAidUsingGET
+#AccountTradeInfoController,get,/api/getOverviewListByAid
+#获取指定交易账户图形报表信息(用户详情下面的图形总收益、月收益)
+操作成功,统计类别为0.case01:
+    statisType:
+    accountId:
+    uid:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

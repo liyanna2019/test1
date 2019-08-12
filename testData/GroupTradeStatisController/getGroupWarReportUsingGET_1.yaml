@@ -1,0 +1,11 @@
+
+#template_name:getGroupWarReportUsingGET_1
+#GroupTradeStatisController,get,/api/getGroupWarReport
+#查询指定群内战报信息
+test.case01:
+    groupId:
+    warType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

@@ -1,0 +1,12 @@
+
+#template_name:getAccountWarReportByIdUsingGET_1
+#GroupTradeStatisController,get,/api/getAccountWarReportById
+#查询指定ID账户战报信息
+test.case01:
+    reportId:
+    accountId:
+    warType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

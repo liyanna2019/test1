@@ -1,0 +1,12 @@
+
+#template_name:updateBrokerServerStatusUsingGET_1
+#NiuServerController,get,/updateBrokerServerStatus
+#更新交易商申请后调用
+test.case01:
+    uid:
+    brokerName:
+    status:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

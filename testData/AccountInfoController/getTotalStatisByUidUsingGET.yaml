@@ -1,0 +1,10 @@
+
+#template_name:getTotalStatisByUidUsingGET
+#AccountInfoController,get,/api/getTotalStatisByUid
+#获取用户总交易统计信息
+操作成功.case01:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"TotalClosedPL\":\"-55.90K\",\"TotalDayClosedPL\":\"0.00\",\"Uid\":20162846,\"User\":{\"Accounts\":[{\"AccountId\":4911,\"AccountName\":\"200117322\",\"AccountType\":2,\"Index\":1,\"Uid\":20162846},{\"AccountId\":4912,\"AccountName\":\"922290\",\"AccountType\":2,\"Index\":2,\"Uid\":20162846},{\"AccountId\":4913,\"AccountName\":\"200095065\",\"AccountType\":2,\"Index\":3,\"Uid\":20162846}],\"IsIdentity\":0,\"NickName\":\"whiteTTT111\",\"NiuAuth\":1,\"TradingMaxims\":\"娃哈哈哈哈\",\"Uid\":20162846,\"UserAuth\":{\"BU\":1,\"ID\":0,\"KB\":0,\"Niu\":1},\"UserCenterImg\":\"https://fxchatimage.fx110.com/album/scenery/6.jpg\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"UserName\":\"XD2450022\"},\"subCounts\":0}"
+    subCode: null

@@ -1,0 +1,16 @@
+
+#template_name:getAccountsRelBrokerByUidUsingGET_15
+#AccountInfoForYunpcAndZhuzController,get,/api/getAccountsRelBrokerByUid
+#查询指定用户ID、交易账户经纪商关联集合信息
+获取成功,正确的uid.case01:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"BrokerFullName\":\"UNION STANDARD\",\"BrokerId\":2,\"MasterBrokerId\":1156,\"AccountId\":4911,\"Uid\":20162846,\"AccountName\":\"200117322\",\"AccountNumber\":200117322,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png\",\"BrokerName\":\"USGFX\",\"BrokerServerName\":\"USGFX-Live2\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":0,\"Index\":1,\"Rank\":55,\"MELevel\":5},{\"BrokerFullName\":\"MetaTrader 4 IC Markets\",\"BrokerId\":3,\"MasterBrokerId\":917,\"AccountId\":4912,\"Uid\":20162846,\"AccountName\":\"922290\",\"AccountNumber\":922290,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"BrokerName\":\"IC Markets\",\"BrokerServerName\":\"ICMarkets-Live08\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":1,\"ConnecStatus\":4,\"RssStatus\":0,\"Index\":2,\"Rank\":41,\"MELevel\":4},{\"BrokerFullName\":\"UNION STANDARD\",\"BrokerId\":2,\"MasterBrokerId\":1156,\"AccountId\":4913,\"Uid\":20162846,\"AccountName\":\"200095065\",\"AccountNumber\":200095065,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png\",\"BrokerName\":\"USGFX\",\"BrokerServerName\":\"USGFX-Live2\",\"AccountType\":2,\"AccountCategory\":0,\"AuthStatus\":3,\"AccountStatus\":0,\"ConnecStatus\":4,\"RssStatus\":0,\"Index\":3,\"Rank\":0,\"MELevel\":5}]"
+    subCode: null
+获取失败,错误的uid.case02:
+    uid: 20165010
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

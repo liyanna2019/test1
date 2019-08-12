@@ -1,0 +1,11 @@
+
+#template_name:getBalanceGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getBalanceGapList
+#获取指定时间段内账户交易余额概况图表信息
+test.case01:
+    accountId:
+    dateType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

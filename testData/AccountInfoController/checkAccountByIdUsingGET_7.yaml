@@ -1,0 +1,21 @@
+
+#template_name:checkAccountByIdUsingGET_7
+#AccountInfoController,get,/api/checkAccountById
+#检查用户是否和账户匹配,subcode=10001可查看，10002不可查看
+可以查看，获取成功.case01:
+    accountId: 4498
+    uid: 20163759
+    currentUid: 20163773
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"AccountId\":4498,\"Uid\":20163759,\"Platform\":2,\"BrokerId\":12,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095518175.png\",\"BrokerName\":\"SVSFX\",\"BrokerServerId\":16,\"BrokerServerName\":\"SVSFX-Live\",\"AccountNumber\":100262,\"InvestorPassword\":\"W*******C\",\"AccountName\":\"SVS\",\"AccountCategory\":0,\"TradingType\":0,\"AccountType\":2,\"Currency\":\"USD\",\"Leverage\":400,\"SyncNodeDate\":\"2019-05-15 08:58:31\",\"Index\":3,\"AccountStatus\":1,\"THistoryStatus\":1,\"TCurrentStatus\":1,\"RssStatus\":1,\"PositionPermissions\":[{\"dictionaryid\":248,\"dictionaryvalue\":\"订单号\",\"dictionaryvalueid\":\"ticket\",\"status\":1},{\"dictionaryid\":249,\"dictionaryvalue\":\"手数\",\"dictionaryvalueid\":\"lots\",\"status\":1},{\"dictionaryid\":250,\"dictionaryvalue\":\"开仓时间\",\"dictionaryvalueid\":\"opentime\",\"status\":1},{\"dictionaryid\":251,\"dictionaryvalue\":\"开仓价\",\"dictionaryvalueid\":\"openprice\",\"status\":1},{\"dictionaryid\":252,\"dictionaryvalue\":\"当前价\",\"dictionaryvalueid\":\"closeprice\",\"status\":1},{\"dictionaryid\":253,\"dictionaryvalue\":\"止盈\",\"dictionaryvalueid\":\"tp\",\"status\":1},{\"dictionaryid\":254,\"dictionaryvalue\":\"止损\",\"dictionaryvalueid\":\"sl\",\"status\":1},{\"dictionaryid\":255,\"dictionaryvalue\":\"手续费\",\"dictionaryvalueid\":\"commission\",\"status\":1},{\"dictionaryid\":256,\"dictionaryvalue\":\"利息\",\"dictionaryvalueid\":\"swap\",\"status\":1},{\"dictionaryid\":257,\"dictionaryvalue\":\"获利\",\"dictionaryvalueid\":\"profit\",\"status\":1}]}"
+    subCode: "10001"
+
+不可以查看，获取失败.case02:
+    accountId: 4951
+    uid: 20163742
+    currentUid: 20163773
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"AccountId\":4951,\"Uid\":20163742,\"Platform\":2,\"BrokerId\":2,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png\",\"BrokerName\":\"USGFX\",\"BrokerServerId\":4,\"BrokerServerName\":\"USGFX-Live2\",\"AccountNumber\":401088,\"InvestorPassword\":\"u******8\",\"AccountName\":\"401088\",\"AccountCategory\":0,\"TradingType\":0,\"AccountType\":2,\"Currency\":\"USD\",\"Leverage\":0,\"SyncNodeDate\":\"2018-11-30 12:39:58\",\"Index\":0,\"AccountStatus\":2,\"THistoryStatus\":1,\"TCurrentStatus\":1,\"RssStatus\":1,\"PositionPermissions\":[{\"dictionaryid\":248,\"dictionaryvalue\":\"订单号\",\"dictionaryvalueid\":\"ticket\",\"status\":1},{\"dictionaryid\":249,\"dictionaryvalue\":\"手数\",\"dictionaryvalueid\":\"lots\",\"status\":1},{\"dictionaryid\":250,\"dictionaryvalue\":\"开仓时间\",\"dictionaryvalueid\":\"opentime\",\"status\":1},{\"dictionaryid\":251,\"dictionaryvalue\":\"开仓价\",\"dictionaryvalueid\":\"openprice\",\"status\":1},{\"dictionaryid\":252,\"dictionaryvalue\":\"当前价\",\"dictionaryvalueid\":\"closeprice\",\"status\":1},{\"dictionaryid\":253,\"dictionaryvalue\":\"止盈\",\"dictionaryvalueid\":\"tp\",\"status\":1},{\"dictionaryid\":254,\"dictionaryvalue\":\"止损\",\"dictionaryvalueid\":\"sl\",\"status\":1},{\"dictionaryid\":255,\"dictionaryvalue\":\"手续费\",\"dictionaryvalueid\":\"commission\",\"status\":1},{\"dictionaryid\":256,\"dictionaryvalue\":\"利息\",\"dictionaryvalueid\":\"swap\",\"status\":1},{\"dictionaryid\":257,\"dictionaryvalue\":\"获利\",\"dictionaryvalueid\":\"profit\",\"status\":1}]}"
+    subCode: "10002"

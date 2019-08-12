@@ -1,0 +1,9 @@
+
+#template_name:getPermissionsUsingGET_1
+#AccountInfoController,get,/api/getPermissions
+#获得账户权限字典信息(添加账户时需要调用)
+获取成功.case01:
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"dictionaryid\":248,\"dictionarytypeid\":2,\"dictionaryvalue\":\"订单号\",\"dictionaryvalueid\":\"ticket\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":249,\"dictionarytypeid\":2,\"dictionaryvalue\":\"手数\",\"dictionaryvalueid\":\"lots\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":250,\"dictionarytypeid\":2,\"dictionaryvalue\":\"开仓时间\",\"dictionaryvalueid\":\"opentime\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":251,\"dictionarytypeid\":2,\"dictionaryvalue\":\"开仓价\",\"dictionaryvalueid\":\"openprice\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":252,\"dictionarytypeid\":2,\"dictionaryvalue\":\"当前价\",\"dictionaryvalueid\":\"closeprice\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":253,\"dictionarytypeid\":2,\"dictionaryvalue\":\"止盈\",\"dictionaryvalueid\":\"tp\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":254,\"dictionarytypeid\":2,\"dictionaryvalue\":\"止损\",\"dictionaryvalueid\":\"sl\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":255,\"dictionarytypeid\":2,\"dictionaryvalue\":\"手续费\",\"dictionaryvalueid\":\"commission\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":256,\"dictionarytypeid\":2,\"dictionaryvalue\":\"利息\",\"dictionaryvalueid\":\"swap\",\"dictionaryalias\":null,\"dictionaryrgb\":null},{\"dictionaryid\":257,\"dictionarytypeid\":2,\"dictionaryvalue\":\"获利\",\"dictionaryvalueid\":\"profit\",\"dictionaryalias\":null,\"dictionaryrgb\":null}]"
+    subCode: null

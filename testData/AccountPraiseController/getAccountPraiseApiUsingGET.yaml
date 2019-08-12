@@ -1,0 +1,12 @@
+
+#template_name:getAccountPraiseApiUsingGET
+#AccountPraiseController,get,/api/getAccountPraiseApi
+#账号点赞/取消点赞
+test.case01:
+    accountId:
+    type:
+    uid:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

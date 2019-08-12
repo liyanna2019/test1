@@ -1,0 +1,10 @@
+
+#template_name:getNewSysMEReportUsingGET_7
+#TraderDoctorsController,get,/api/getNewSysMEReport
+#获取指定账户最新系统体检报告信息
+test.case01:
+    accountId:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

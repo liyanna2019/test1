@@ -1,0 +1,13 @@
+
+#template_name:getRankByGroupIdUsingGET_1
+#GroupTradeStatisController,get,/api/getRankByGroupId
+#获取群用户交易Top排行
+test.case01:
+    groupId:
+    topSize:
+    statisType:
+    newVersion:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

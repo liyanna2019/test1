@@ -1,0 +1,14 @@
+
+#template_name:getBestRankByUIdUsingGET
+#GroupTradeStatisController,get,/api/getBestRankByUId
+#获取指定群用户ID最佳交易排行
+test.case01:
+    groupId:
+    uId:
+    statisType:
+    sortType:
+    newVersion:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

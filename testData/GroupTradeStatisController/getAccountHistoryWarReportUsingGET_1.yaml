@@ -1,0 +1,15 @@
+
+#template_name:getAccountHistoryWarReportUsingGET_1
+#GroupTradeStatisController,get,/api/getAccountHistoryWarReport
+#查询指定账户历史战报信息
+test.case01:
+    accountId:
+    warType:
+    startTime:
+    endTime:
+    pageIndex:
+    pageSize:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

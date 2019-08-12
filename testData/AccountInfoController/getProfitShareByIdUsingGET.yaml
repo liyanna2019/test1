@@ -1,0 +1,19 @@
+
+#template_name:getProfitShareByIdUsingGET
+#AccountInfoController,get,/api/getProfitShareById
+#今日盈亏分享
+查询成功,正确的ID.case01:
+    accountId: 4912
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"AccountId\":4912,\"ClosedPL\":-172.04,\"ClosedPLContent\":\"\",\"ExContent\":\"\",\"ExPosition\":1,\"Lots\":0.16,\"LotsContent\":\"\",\"Orders\":2,\"OrdersContent\":\"\",\"PLRate\":-0.3191,\"PLRateContent\":\"\",\"RealAccount\":{\"AccountId\":4912,\"Balance\":539.07000,\"Equity\":367.03000,\"FloatProfit\":-172.04000,\"FreeMargin\":325.84264,\"Id\":192935513,\"Margin\":41.18736,\"MarginRate\":8.9112},\"SnapTimeTicks\":1557991999,\"TotalClosedPL\":-1142.05,\"Uid\":20162846,\"User\":{\"IsIdentity\":0,\"NickName\":\"whiteTTT111\",\"NiuAuth\":1,\"TradingMaxims\":\"娃哈哈哈哈\",\"Uid\":20162846,\"UserAuth\":{\"BU\":1,\"ID\":0,\"KB\":0,\"Niu\":1},\"UserCenterImg\":\"https://fxchatimage.fx110.com/album/scenery/6.jpg\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"UserName\":\"XD2450022\"}}"
+    subCode: null
+
+查询成功,错误的ID.case02:
+    accountId: 50
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"AccountId\":50,\"ClosedPL\":0.0,\"ClosedPLContent\":\"\",\"ExContent\":\"\",\"ExPosition\":0,\"Lots\":0.0,\"LotsContent\":\"\",\"Orders\":0,\"OrdersContent\":\"\",\"PLRate\":0.0,\"PLRateContent\":\"\",\"RealAccount\":{\"AccountId\":0,\"Balance\":0.0,\"Equity\":0.0,\"FloatProfit\":0.0,\"FreeMargin\":0.0,\"Id\":0,\"Margin\":0.0,\"MarginRate\":0.0},\"SnapTimeTicks\":0,\"TotalClosedPL\":0.0,\"Uid\":5079}"
+    subCode: null
