@@ -1,0 +1,14 @@
+
+#template_name:updateAppealStatusUsingGET_1
+#NiuServerController,get,/updateAppealStatus
+#更新账户申请之后调用
+test.case01:
+    uid:
+    brokerName:
+    brokerServerName:
+    accountNumber:
+    status:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

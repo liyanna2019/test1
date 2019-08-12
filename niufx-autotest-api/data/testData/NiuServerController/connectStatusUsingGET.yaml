@@ -1,0 +1,12 @@
+
+#template_name:connectStatusUsingGET
+#NiuServerController,get,/connectStatus
+#账户连接后调用֪
+test.case01:
+    accountId:
+    uid:
+    status:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

@@ -1,0 +1,35 @@
+
+#template_name:getAccountListUsingGET
+#AccountInfoController,get,/api/getAccountList
+#查询账户信息列表
+正确的ID,-1：全部.case01:
+    uid: 20165469
+    accountStatus: -1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"AccountId\":5231,\"Uid\":20165469,\"AccountNumber\":631715,\"AccountName\":\"631715\",\"BrokerName\":\"Swissquote瑞讯\",\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png\",\"BrokerServerName\":\"Swissquote-Live1\",\"AccountType\":2,\"AccountCategory\":0,\"AccountStatus\":1,\"Index\":1,\"StartOpenTime\":\"2018-12-19 08:20:22\",\"LastDate\":\"2019-05-15 22:57:31\",\"MELevel\":4,\"ConnecStatus\":4,\"TraderApplyStatus\":0}]"
+    subCode: null
+
+正确的ID,0：私有.case02:
+    uid: 20165469
+    accountStatus: 0
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null
+
+正确的ID,1：公开.case03:
+    uid: 20165469
+    accountStatus: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"AccountId\":5231,\"Uid\":20165469,\"AccountNumber\":631715,\"AccountName\":\"631715\",\"BrokerName\":\"Swissquote瑞讯\",\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png\",\"BrokerServerName\":\"Swissquote-Live1\",\"AccountType\":2,\"AccountCategory\":0,\"AccountStatus\":1,\"Index\":1,\"StartOpenTime\":\"2018-12-19 08:20:22\",\"LastDate\":\"2019-05-15 22:57:31\",\"MELevel\":4,\"ConnecStatus\":4,\"TraderApplyStatus\":0}]"
+    subCode: null
+
+错误的ID,-1：全部.case04:
+    uid: 201634
+    accountStatus: -1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

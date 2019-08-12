@@ -1,0 +1,30 @@
+
+#template_name:getSymbolsByAccountUsingGET_1
+#SubscribeController,get,/api/getSymbolsByAccount
+#根据账户ID获取该账户的所有可订阅的品种及订阅价格
+操作成功,正确的id.case01:
+    uid: 20165526
+    accountId: 4498
+    subscribeUid: 20163759
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"coin\":0,\"phone\":\"187****0521\",\"pic\":\"https://fxchatimage.fx110.com/headdefault//38_120.jpg\",\"subPrice\":0,\"subTotal\":2,\"subscribedSymbols\":[\"EURUSD\"],\"symbols\":[\"USDCHF\",\"NZDUSD\",\"USDJPY\",\"EURUSD.\",\"AUDCAD.\",\"XAUUSD.\",\"AUDUSD.\",\"EURCHF.\",\"GBPUSD.\",\"EURAUD.\",\"CADJPY.\",\"CHFNOK.\",\"XAGUSD.\",\"AUDNZD.\",\"EURJPY\",\"GBPUSD\",\"USDCAD\",\"AUDUSD\",\"GBPJPY\",\"XAUUSD.fx\"]}"
+    subCode: null
+
+操作失败,错误的id.case02:
+    uid: 20165526
+    accountId: 50
+    subscribeUid: 20163759
+    http_statusCode: 200
+    recode: -1
+    bodyMessage: "[]"
+    subCode: null
+
+操作失败,不支持订阅.case03:
+    uid: 20165526
+    accountId: 4912
+    subscribeUid: 20162846
+    http_statusCode: 200
+    recode: -308
+    bodyMessage: "[]"
+    subCode: null

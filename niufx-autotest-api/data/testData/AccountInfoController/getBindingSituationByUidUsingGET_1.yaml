@@ -1,0 +1,27 @@
+
+#template_name:getBindingSituationByUidUsingGET_1
+#AccountInfoController,get,/api/getBindingSituationByUid
+#查询指定用户发送红包的状态
+正确的uid,版本为1.case01:
+    uid: 20165469
+    versions: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"sendSituation\":2}"
+    subCode: null
+
+正确的uid,版本为0.case02:
+    uid: 20163599
+    versions: 0
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"sendSituation\":1}"
+    subCode: null
+
+错误的uid,版本为1.case03:
+    uid: 101699
+    versions: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

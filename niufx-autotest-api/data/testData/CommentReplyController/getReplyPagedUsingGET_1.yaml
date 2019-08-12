@@ -1,0 +1,23 @@
+
+#template_name:getReplyPagedUsingGET_1
+#CommentReplyController,get,/api/getReplyPaged
+#根据评论ID获取跟评分页
+操作成功,正确的id.case01:
+    commentId: 1120
+    currentUid: 20162846
+    nodeTime: ""
+    topSize: 10
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"TotalCount\":2,\"RemainCount\":0,\"ReturnReplyList\":[{\"Id\":1156,\"AboutId\":4498,\"CommentId\":1120,\"AddTime\":\"2019-05-11 11:13:24\",\"Ip\":\"183.14.28.27\",\"Area\":\"广东省深圳市\",\"Content\":\"再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战再战\",\"Status\":1,\"ImageInfo\":[],\"Uid\":20163466,\"User\":{\"Uid\":20163466,\"UserName\":\"WB2617968\",\"NickName\":\"0523\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_60.png\",\"TradingMaxims\":\"测录 咯咯咯\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"AtUid\":0,\"AtUser\":null,\"Praises\":0,\"IsPraised\":false},{\"Id\":1157,\"AboutId\":4498,\"CommentId\":1120,\"AddTime\":\"2019-05-11 11:13:42\",\"Ip\":\"183.14.28.27\",\"Area\":\"广东省深圳市\",\"Content\":\"赞\",\"Status\":1,\"ImageInfo\":[{\"Small\":\"https://gaimg.forexmedia.com/upload/images/niu/2019/05/11/111332078.jpg\",\"Big\":\"https://gaimg.forexmedia.com/upload/images/niu/2019/05/11/111332078.jpg\",\"Description\":\"\"}],\"Uid\":20163466,\"User\":{\"Uid\":20163466,\"UserName\":\"WB2617968\",\"NickName\":\"0523\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_60.png\",\"TradingMaxims\":\"测录 咯咯咯\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"AtUid\":20163466,\"AtUser\":{\"Uid\":20163466,\"UserName\":\"WB2617968\",\"NickName\":\"0523\",\"UserHeadImg\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_120\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_120.png\",\"UserHeadImg_48\":\"https://testfxchatimage.fx110.com/api/secrecy13/default/2018/9/20180910105322682_60.png\",\"TradingMaxims\":\"测录 咯咯咯\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"Praises\":0,\"IsPraised\":false}]}"
+    subCode: null
+
+操作成功,正确的id.case02:
+    commentId: 1120
+    currentUid: 20162846
+    nodeTime: ""
+    topSize: 10
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

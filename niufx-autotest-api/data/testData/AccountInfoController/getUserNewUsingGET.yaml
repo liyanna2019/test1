@@ -1,0 +1,17 @@
+
+#template_name:getUserNewUsingGET
+#AccountInfoController,get,/api/getUserNew
+#获取新晋交易用户
+获取条数为0.case01:
+    topSize: 0
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null
+
+获取条数为1.case02:
+    topSize: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"closedpl\":-190.16,\"totalprofit\":-190.16,\"user\":{\"accounts\":[],\"uid\":20163759,\"username\":\"rg2854164\",\"nickname\":\"我的名字叫wy\",\"userheadimg\":\"https://fxchatimage.fx110.com/headdefault//38_120.jpg\",\"userheadimg_120\":\"https://fxchatimage.fx110.com/headdefault//38_120.jpg\",\"userheadimg_48\":\"https://fxchatimage.fx110.com/headdefault//38_60.jpg\",\"tradingmaxims\":\"’‘༻ི(ؔᵒ̶̷ᵕؔᵒ̷̶)༄୭*ˈ｡◕‿◕｡(ಡωಡ)\\\"\",\"isidentity\":1,\"niuauth\":1,\"usercenterimg\":null,\"userauth\":{\"niu\":1,\"kb\":0,\"id\":0,\"bu\":0}},\"account\":{\"accountid\":4498,\"uid\":20163759,\"accountname\":\"svs\",\"accountnumber\":100262,\"brokerlogo\":\"https://fxchatimage.fx110.com/api/secrecymaster/default/2017/6/20170620095518175.png\",\"brokername\":\"svsfx\",\"brokerservername\":\"svsfx-live\",\"accounttype\":2,\"accountcategory\":0,\"authstatus\":3,\"accountstatus\":1,\"connecstatus\":4,\"rssstatus\":1,\"index\":3,\"rank\":34,\"melevel\":4}}]"
+    subCode: null

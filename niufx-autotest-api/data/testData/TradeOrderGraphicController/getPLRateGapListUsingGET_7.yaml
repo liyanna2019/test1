@@ -1,0 +1,11 @@
+
+#template_name:getPLRateGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getPLRateGapList
+#获取指定时间段内账户交易收益率图表信息
+test.case01:
+    accountId:
+    dateType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

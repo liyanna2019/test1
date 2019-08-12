@@ -1,0 +1,2002 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>牛人榜，api测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.4"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 50%;
+	height: 50%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+	position:absolute;
+	left: 20%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:48%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{  
+    position:absolute;  ;
+    top:20px;  
+    left:300px; 
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){ 
+    var color = ["#6c6","#c60","#c00"];  
+    var data = [pass,fail,error]; 
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");  
+    var ctx = canvas.getContext("2d");  
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){  
+        ctx.fillStyle = color[i];  
+        ctx.beginPath();  
+        ctx.moveTo(112,84);   
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);  
+        ctx.fill();  
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));  
+        ctx.fillStyle = color[i];  
+        ctx.fillRect(posX, posY + 20 * i, width, height);  
+        ctx.moveTo(posX, posY + 20 * i);  
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];  
+        ctx.fillText(percent, textX, textY + 20 * i);  
+    
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+	
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";	
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>牛人榜，api测试报告</h1>
+<p class='attribute'><strong>开始时间:</strong> 2019-05-17 10:21:41</p>
+<p class='attribute'><strong>耗时:</strong> 0:00:09.254514</p>
+<p class='attribute'><strong>状态:</strong> 通过 31 失败 25</p>
+
+<p class='description'>测试情况</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+    <td>错误截图</td>
+</tr>
+
+<tr class='failClass'>
+    <td>InterfaceTest</td>
+    <td>56</td>
+    <td>31</td>
+    <td>25</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',56)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt1.1'>
+    <td class='none'><div class='testcase'>test_api_checkAccountById_request_00001_可以查看_获取成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: http://218.244.157.23:8090/server/api/checkAccountById?accountId=4498&amp;uid=20163759&amp;currentUid=20163773
+{'code': 0, 'message': '获取成功', 'bodyMessage': '{"AccountId":4498,"Uid":20163759,"Platform":2,"BrokerId":12,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095518175.png","BrokerName":"SVSFX","BrokerServerId":16,"BrokerServerName":"SVSFX-Live","AccountNumber":100262,"InvestorPassword":"W*******C","AccountName":"SVS","AccountCategory":0,"TradingType":0,"AccountType":2,"Currency":"USD","Leverage":400,"SyncNodeDate":"2019-05-15 08:58:31","Index":3,"AccountStatus":1,"THistoryStatus":1,"TCurrentStatus":1,"RssStatus":1,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}]}', 'subCode': '10001', 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.2'>
+    <td class='none'><div class='testcase'>test_api_checkAccountById_request_00002_不可以查看_获取失败_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        通过</a>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: http://218.244.157.23:8090/server/api/checkAccountById?accountId=4951&amp;uid=20163742&amp;currentUid=20163773
+{'code': 0, 'message': '该账户已被删除不再支持查看', 'bodyMessage': '{"AccountId":4951,"Uid":20163742,"Platform":2,"BrokerId":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerId":4,"BrokerServerName":"USGFX-Live2","AccountNumber":401088,"InvestorPassword":"u******8","AccountName":"401088","AccountCategory":0,"TradingType":0,"AccountType":2,"Currency":"USD","Leverage":0,"SyncNodeDate":"2018-11-30 12:39:58","Index":0,"AccountStatus":2,"THistoryStatus":1,"TCurrentStatus":1,"RssStatus":1,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}]}', 'subCode': '10002', 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.3'>
+    <td class='none'><div class='testcase'>test_api_getAccountById_request_00001_获取成功_正确的账户ID_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: http://218.244.157.23:8090/server/api/getAccountById?accountId=4951&amp;uid=20163742
+{'code': 0, 'message': '获取成功', 'bodyMessage': '{"AccountId":4951,"Uid":20163742,"Platform":2,"BrokerId":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerId":4,"BrokerServerName":"USGFX-Live2","AccountNumber":401088,"InvestorPassword":"u******8","AccountName":"401088","AccountCategory":0,"TradingType":0,"AccountType":2,"Currency":"USD","Leverage":0,"SyncNodeDate":"2018-11-30 12:39:58","Index":0,"AccountStatus":2,"THistoryStatus":1,"TCurrentStatus":1,"RssStatus":1,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}]}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.4'>
+    <td class='none'><div class='testcase'>test_api_getAccountById_request_00002_获取失败_错误的账户ID_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        通过</a>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: http://218.244.157.23:8090/server/api/getAccountById?accountId=49510&amp;uid=20163742
+{'code': -1, 'message': '获取失败，对象为空', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.5'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountList_request_00001_正确的ID__1_全部_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.5')" >
+        失败</a>
+
+    <div id='div_ft1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.5: http://218.244.157.23:8090/server/api/getAccountList?uid=20165469&amp;accountStatus=-1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"AccountId":5231,"Uid":20165469,"AccountNumber":631715,"AccountName":"631715","BrokerName":"Swissquote瑞讯","BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png","BrokerServerName":"Swissquote-Live1","AccountType":2,"AccountCategory":0,"AccountStatus":1,"Index":1,"StartOpenTime":"2018-12-19 08:20:22","LastDate":"2019-05-17 10:00:42","MELevel":4,"ConnecStatus":4,"TraderApplyStatus":0}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 77, in test_api_getAccountList_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"A[360 chars]-05-17 10:00:42","MELevel":4,"ConnecStatus":4,[19 chars]:0}]' != '[{"A[360 chars]-05-15 22:57:31","MELevel":4,"ConnecStatus":4,[19 chars]:0}]'
+Diff is 1637 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.6'>
+    <td class='none'><div class='testcase'>test_api_getAccountList_request_00002_正确的ID_0_私有_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: http://218.244.157.23:8090/server/api/getAccountList?uid=20165469&amp;accountStatus=0
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.7'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountList_request_00003_正确的ID_1_公开_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.7')" >
+        失败</a>
+
+    <div id='div_ft1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.7: http://218.244.157.23:8090/server/api/getAccountList?uid=20165469&amp;accountStatus=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"AccountId":5231,"Uid":20165469,"AccountNumber":631715,"AccountName":"631715","BrokerName":"Swissquote瑞讯","BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png","BrokerServerName":"Swissquote-Live1","AccountType":2,"AccountCategory":0,"AccountStatus":1,"Index":1,"StartOpenTime":"2018-12-19 08:20:22","LastDate":"2019-05-17 10:00:42","MELevel":4,"ConnecStatus":4,"TraderApplyStatus":0}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 77, in test_api_getAccountList_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"A[360 chars]-05-17 10:00:42","MELevel":4,"ConnecStatus":4,[19 chars]:0}]' != '[{"A[360 chars]-05-15 22:57:31","MELevel":4,"ConnecStatus":4,[19 chars]:0}]'
+Diff is 1637 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.8'>
+    <td class='none'><div class='testcase'>test_api_getAccountList_request_00004_错误的ID__1_全部_case04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        通过</a>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: http://218.244.157.23:8090/server/api/getAccountList?uid=201634&amp;accountStatus=-1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.9'>
+    <td class='none'><div class='testcase'>test_api_getAccountRelBrokerIdsByUid_request_00001_操作成功_正确的uid_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.9')" >
+        通过</a>
+
+    <div id='div_pt1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.9: http://218.244.157.23:8090/server/api/getAccountRelBrokerIdsByUid?uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"AccountId":4911,"MasterBrokerId":1156},{"AccountId":4912,"MasterBrokerId":917},{"AccountId":4913,"MasterBrokerId":1156}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.10'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountRelBrokerIdsByUid_request_00002_获取失败_错误的uid_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.10')" >
+        失败</a>
+
+    <div id='div_ft1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.10: http://218.244.157.23:8090/server/api/getAccountRelBrokerIdsByUid?uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"AccountId":4911,"MasterBrokerId":1156},{"AccountId":4912,"MasterBrokerId":917},{"AccountId":4913,"MasterBrokerId":1156}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 209, in test_api_getAccountRelBrokerIdsByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"AccountId":4911,"MasterBrokerId":1156}[78 chars]56}]' != '{}'
+- [{"AccountId":4911,"MasterBrokerId":1156},{"AccountId":4912,"MasterBrokerId":917},{"AccountId":4913,"MasterBrokerId":1156}]
++ {}
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.11'>
+    <td class='none'><div class='testcase'>test_api_getAccountStatus_request_00001_操作成功_正确的uid_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        通过</a>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: http://218.244.157.23:8090/server/api/getAccountStatus?uid=20162846&amp;accountId=4912
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"accountStatus":1}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.12'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeDetail_request_00001_操作成功_类型为0_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.12')" >
+        失败</a>
+
+    <div id='div_ft1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.12: http://218.244.157.23:8090/server/api/getAccountTradeDetail?statisType=0&amp;subscribeAccountId=4912&amp;subscribeUid=20162846&amp;uid=20163599
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountStatus":1,"AccountType":2,"AuthStatus":3,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","ConnecStatus":4,"Currency":"USD","Index":2,"LastDate":"2019-05-17 00:02:53","Leverage":500,"MELevel":4,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}],"Rank":40,"RssStatus":0,"StartOpenTime":"2017-12-06 03:56:06","TCurrentStatus":1,"THistoryStatus":1,"Uid":20162846,"isSub":0},"AccountId":4912,"AvgDuration":17.66731,"AvgLoss":-29.10,"AvgLossPips":-71.89,"AvgLots":0.05,"AvgProfit":4.39,"AvgProfitPips":10.30,"Balance":557.04,"BuyClosedPL":-984.93,"BuyLossOrders":171,"BuyLots":66.93,"BuyProfitOrders":997,"ClosedPL":-1124.09,"ClosedSwap":-330.99,"Commission":-1065.68,"Deposit":4261.12,"Duration":48055.10544,"FocusSymbol":"XAUUSD","Id":3317349,"IntoBalance":4261.12,"LossCount":390,"LossOrders":390,"Lots":152.34,"MaxDuration":1030.38333,"MaxLoss":-396.82,"MaxLossPips":-1703.50,"MaxLossTicket":"29652925","MaxLots":1.00,"MaxPips":572.60,"MaxProfit":146.32,"MaxProfitPips":572.60,"MaxProfitTicket":"25838488","MinDuration":0.00111,"MinLots":0.01,"MinPips":-1703.50,"Orders":2720,"OutBalance":-2580.00,"Pips":-4038.80,"ProfitCount":2330,"ProfitOrders":2330,"ProfitRate":-16.43,"RetractRate":0.00,"SellClosedPL":-139.16,"SellLossOrders":219,"SellLots":85.41,"SellOrders":1549,"SellProfitOrders":1326,"StatisType":0,"TotalLots":152.34,"TotalPLPips":-4038.80,"TotalProfit":-1124.09,"TradeCount":2720,"Uid":20162846,"User":{"Accounts":[{"AccountCategory":0,"AccountId":4911,"AccountName":"200117322","AccountNumber":200117322,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","Index":1,"Uid":20162846},{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","Index":2,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"WinRate":85.62,"Withdraw":-2580.00}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 259, in test_api_getAccountTradeDetail_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[364 chars]-05-17 00:02:53","Leverage":500,"MELevel":4,"P[3043 chars].00}' != '{"Ac[364 chars]-05-15 22:49:50","Leverage":500,"MELevel":4,"P[3043 chars].00}'
+Diff is 13815 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.13'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeDetail_request_00002_操作成功_类型为1_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.13')" >
+        失败</a>
+
+    <div id='div_ft1.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.13: http://218.244.157.23:8090/server/api/getAccountTradeDetail?statisType=1&amp;subscribeAccountId=4912&amp;subscribeUid=20162846&amp;uid=20163599
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountStatus":1,"AccountType":2,"AuthStatus":3,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","ConnecStatus":4,"Currency":"USD","Index":2,"LastDate":"2019-05-17 00:02:53","Leverage":500,"MELevel":4,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}],"Rank":40,"RssStatus":0,"StartOpenTime":"2017-12-06 03:56:06","TCurrentStatus":1,"THistoryStatus":1,"Uid":20162846,"isSub":0},"AccountId":4912,"AvgDuration":0.00000,"AvgLoss":0.00,"AvgLossPips":0.00,"AvgLots":0.00,"AvgProfit":0.00,"AvgProfitPips":0.00,"Balance":0.00,"BuyClosedPL":0.00,"BuyLossOrders":0,"BuyLots":0.00,"BuyProfitOrders":0,"ClosedPL":0.00,"ClosedSwap":0.00,"Commission":0.00,"Deposit":0.00,"Duration":0.00000,"FocusSymbol":"","Id":3317350,"IntoBalance":0.00,"LossCount":0,"LossOrders":0,"Lots":0.00,"MaxDuration":0.00000,"MaxLoss":0.00,"MaxLossPips":0.00,"MaxLossTicket":"","MaxLots":0.00,"MaxPips":0.00,"MaxProfit":0.00,"MaxProfitPips":0.00,"MaxProfitTicket":"","MinDuration":0.00000,"MinLots":0.00,"MinPips":0.00,"Orders":0,"OutBalance":0.00,"Pips":0.00,"ProfitCount":0,"ProfitOrders":0,"ProfitRate":0.00,"RetractRate":0.00,"SellClosedPL":0.00,"SellLossOrders":0,"SellLots":0.00,"SellOrders":0,"SellProfitOrders":0,"StatisType":1,"TotalLots":0.00,"TotalPLPips":0.00,"TotalProfit":0.00,"TradeCount":0,"Uid":20162846,"User":{"Accounts":[{"AccountCategory":0,"AccountId":4911,"AccountName":"200117322","AccountNumber":200117322,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","Index":1,"Uid":20162846},{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","Index":2,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"WinRate":0.00,"Withdraw":0.00}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 259, in test_api_getAccountTradeDetail_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[364 chars]-05-17 00:02:53","Leverage":500,"MELevel":4,"P[2909 chars].00}' != '{"Ac[364 chars]-05-15 22:49:50","Leverage":500,"MELevel":4,"P[2908 chars].00}'
+Diff is 12427 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.14'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeDetail_request_00003_操作成功_类型为2_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.14')" >
+        失败</a>
+
+    <div id='div_ft1.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.14: http://218.244.157.23:8090/server/api/getAccountTradeDetail?statisType=2&amp;subscribeAccountId=4912&amp;subscribeUid=20162846&amp;uid=20163599
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountStatus":1,"AccountType":2,"AuthStatus":3,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","ConnecStatus":4,"Currency":"USD","Index":2,"LastDate":"2019-05-17 00:02:53","Leverage":500,"MELevel":4,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}],"Rank":40,"RssStatus":0,"StartOpenTime":"2017-12-06 03:56:06","TCurrentStatus":1,"THistoryStatus":1,"Uid":20162846,"isSub":0},"AccountId":4912,"AvgDuration":18.56518,"AvgLoss":0.00,"AvgLossPips":0.00,"AvgLots":0.09,"AvgProfit":6.51,"AvgProfitPips":8.31,"Balance":400.64,"BuyClosedPL":25.45,"BuyLossOrders":0,"BuyLots":0.50,"BuyProfitOrders":5,"ClosedPL":156.40,"ClosedSwap":3.88,"Commission":-17.15,"Deposit":0.00,"Duration":482.69472,"FocusSymbol":"XAUUSD","Id":3317351,"IntoBalance":0.00,"LossCount":2,"LossOrders":2,"Lots":2.45,"MaxDuration":75.18694,"MaxLoss":0.00,"MaxLossPips":0.00,"MaxLossTicket":"","MaxLots":0.10,"MaxPips":16.20,"MaxProfit":15.50,"MaxProfitPips":16.20,"MaxProfitTicket":"53262357","MinDuration":0.00500,"MinLots":0.01,"MinPips":0.00,"Orders":26,"OutBalance":0.00,"Pips":199.60,"ProfitCount":24,"ProfitOrders":24,"ProfitRate":39.04,"RetractRate":0.00,"SellClosedPL":130.95,"SellLossOrders":2,"SellLots":1.95,"SellOrders":21,"SellProfitOrders":19,"StatisType":2,"TotalLots":2.45,"TotalPLPips":199.60,"TotalProfit":156.40,"TradeCount":26,"Uid":20162846,"User":{"Accounts":[{"AccountCategory":0,"AccountId":4911,"AccountName":"200117322","AccountNumber":200117322,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","Index":1,"Uid":20162846},{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","Index":2,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"WinRate":92.31,"Withdraw":0.00}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 259, in test_api_getAccountTradeDetail_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[364 chars]-05-17 00:02:53","Leverage":500,"MELevel":4,"P[2953 chars].00}' != '{"Ac[364 chars]-05-15 22:49:50","Leverage":500,"MELevel":4,"P[2953 chars].00}'
+Diff is 13463 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.15'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeDetail_request_00004_操作成功_类型为3_case04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.15')" >
+        失败</a>
+
+    <div id='div_ft1.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.15: http://218.244.157.23:8090/server/api/getAccountTradeDetail?statisType=3&amp;subscribeAccountId=4912&amp;subscribeUid=20162846&amp;uid=20163599
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountStatus":1,"AccountType":2,"AuthStatus":3,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","ConnecStatus":4,"Currency":"USD","Index":2,"LastDate":"2019-05-17 00:02:53","Leverage":500,"MELevel":4,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}],"Rank":40,"RssStatus":0,"StartOpenTime":"2017-12-06 03:56:06","TCurrentStatus":1,"THistoryStatus":1,"Uid":20162846,"isSub":0},"AccountId":4912,"AvgDuration":17.19502,"AvgLoss":-64.52,"AvgLossPips":-71.33,"AvgLots":0.09,"AvgProfit":5.39,"AvgProfitPips":6.80,"Balance":314.30,"BuyClosedPL":71.42,"BuyLossOrders":0,"BuyLots":1.64,"BuyProfitOrders":17,"ClosedPL":-203.16,"ClosedSwap":-17.37,"Commission":-52.85,"Deposit":445.90,"Duration":1358.40720,"FocusSymbol":"XAUUSD","Id":3317352,"IntoBalance":445.90,"LossCount":9,"LossOrders":9,"Lots":7.55,"MaxDuration":170.86167,"MaxLoss":-139.32,"MaxLossPips":-157.00,"MaxLossTicket":"51727259","MaxLots":0.10,"MaxPips":16.20,"MaxProfit":15.50,"MaxProfitPips":16.20,"MaxProfitTicket":"53262357","MinDuration":0.00500,"MinLots":0.01,"MinPips":-157.00,"Orders":79,"OutBalance":0.00,"Pips":-165.80,"ProfitCount":70,"ProfitOrders":70,"ProfitRate":-6.08,"RetractRate":0.00,"SellClosedPL":-274.58,"SellLossOrders":9,"SellLots":5.91,"SellOrders":62,"SellProfitOrders":53,"StatisType":3,"TotalLots":7.55,"TotalPLPips":-165.80,"TotalProfit":-203.16,"TradeCount":79,"Uid":20162846,"User":{"Accounts":[{"AccountCategory":0,"AccountId":4911,"AccountName":"200117322","AccountNumber":200117322,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","Index":1,"Uid":20162846},{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","Index":2,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"WinRate":88.61,"Withdraw":0.00}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 259, in test_api_getAccountTradeDetail_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[364 chars]-05-17 00:02:53","Leverage":500,"MELevel":4,"P[2988 chars].00}' != '{"Ac[364 chars]-05-15 22:49:50","Leverage":500,"MELevel":4,"P[2989 chars].00}'
+Diff is 13605 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.16'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeDetail_request_00005_操作成功_类型为4_case05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.16')" >
+        失败</a>
+
+    <div id='div_ft1.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.16: http://218.244.157.23:8090/server/api/getAccountTradeDetail?statisType=4&amp;subscribeAccountId=4912&amp;subscribeUid=20162846&amp;uid=20163599
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountStatus":1,"AccountType":2,"AuthStatus":3,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","ConnecStatus":4,"Currency":"USD","Index":2,"LastDate":"2019-05-17 00:02:53","Leverage":500,"MELevel":4,"PositionPermissions":[{"dictionaryid":248,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","status":1},{"dictionaryid":249,"dictionaryvalue":"手数","dictionaryvalueid":"lots","status":1},{"dictionaryid":250,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","status":1},{"dictionaryid":251,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","status":1},{"dictionaryid":252,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","status":1},{"dictionaryid":253,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","status":1},{"dictionaryid":254,"dictionaryvalue":"止损","dictionaryvalueid":"sl","status":1},{"dictionaryid":255,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","status":1},{"dictionaryid":256,"dictionaryvalue":"利息","dictionaryvalueid":"swap","status":1},{"dictionaryid":257,"dictionaryvalue":"获利","dictionaryvalueid":"profit","status":1}],"Rank":40,"RssStatus":0,"StartOpenTime":"2017-12-06 03:56:06","TCurrentStatus":1,"THistoryStatus":1,"Uid":20162846,"isSub":0},"AccountId":4912,"AvgDuration":15.58965,"AvgLoss":-31.31,"AvgLossPips":-83.86,"AvgLots":0.04,"AvgProfit":3.38,"AvgProfitPips":9.74,"Balance":406.45,"BuyClosedPL":-1454.54,"BuyLossOrders":94,"BuyLots":36.51,"BuyProfitOrders":676,"ClosedPL":-1765.78,"ClosedSwap":-219.81,"Commission":-618.52,"Deposit":3496.37,"Duration":28949.99413,"FocusSymbol":"XAUUSD","Id":3317353,"IntoBalance":3496.37,"LossCount":232,"LossOrders":232,"Lots":88.36,"MaxDuration":809.98500,"MaxLoss":-260.73,"MaxLossPips":-1251.30,"MaxLossTicket":"39224871","MaxLots":1.00,"MaxPips":250.10,"MaxProfit":46.28,"MaxProfitPips":250.10,"MaxProfitTicket":"38714974","MinDuration":0.00111,"MinLots":0.01,"MinPips":-1251.30,"Orders":1857,"OutBalance":-1580.00,"Pips":-3620.10,"ProfitCount":1625,"ProfitOrders":1625,"ProfitRate":-36.02,"RetractRate":0.00,"SellClosedPL":-311.24,"SellLossOrders":138,"SellLots":51.85,"SellOrders":1084,"SellProfitOrders":943,"StatisType":4,"TotalLots":88.36,"TotalPLPips":-3620.10,"TotalProfit":-1765.78,"TradeCount":1857,"Uid":20162846,"User":{"Accounts":[{"AccountCategory":0,"AccountId":4911,"AccountName":"200117322","AccountNumber":200117322,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","Index":1,"Uid":20162846},{"AccountCategory":0,"AccountId":4912,"AccountName":"922290","AccountNumber":922290,"AccountType":2,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","Index":2,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"WinRate":87.47,"Withdraw":-1580.00}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 259, in test_api_getAccountTradeDetail_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[364 chars]-05-17 00:02:53","Leverage":500,"MELevel":4,"P[3036 chars].00}' != '{"Ac[364 chars]-05-15 22:49:50","Leverage":500,"MELevel":4,"P[3036 chars].00}'
+Diff is 13787 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.17'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountTradeRealTimeData_request_00001_操作成功_正确的id_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.17')" >
+        失败</a>
+
+    <div id='div_ft1.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.17: http://218.244.157.23:8090/server/api/getAccountTradeRealTimeData?accountId=4912&amp;uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"Account":{"BrokerServerName":"ICMarkets-Live08","AccountId":4912,"Index":2,"Rank":40,"AccountCategory":0,"ConnecStatus":4,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","AccountType":2,"BrokerName":"IC Markets","AccountNumber":922290,"MELevel":4,"Uid":20162846,"AccountStatus":1,"LastDate":"2019-05-17 00:02:53","AuthStatus":3,"RssStatus":0,"AccountName":"922290"},"AccountId":4912,"Equity":557.03000,"AccountNumber":922290,"FreeMargin":557.03000,"UId":20162846,"Credit":"0","FloatProfit":0.00000,"Currency":"USD","Leverage":500,"Id":192935513,"UpdateTimeTicks":1558059698,"Balance":557.03000,"AccountName":"Xu Lu","Margin":0.00000}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 271, in test_api_getAccountTradeRealTimeData_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[76 chars]nk":40,"AccountCategory":0,"ConnecStatus":4,"B[557 chars]000}' != '{"Ac[76 chars]nk":42,"AccountCategory":0,"ConnecStatus":4,"B[561 chars]736}'
+Diff is 2767 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.18'>
+    <td class='none'><div class='testcase'>test_api_getAccountTradeRealTimeData_request_00002_操作成功_不正确的id_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.18')" >
+        通过</a>
+
+    <div id='div_pt1.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.18: http://218.244.157.23:8090/server/api/getAccountTradeRealTimeData?accountId=50&amp;uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"AccountId":50,"Equity":0.0,"AccountNumber":0,"FreeMargin":0.0,"UId":0,"Credit":"0","FloatProfit":0.0,"Leverage":0,"Id":0,"UpdateTimeTicks":0,"Balance":0.0,"Margin":0.0}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.19'>
+    <td class='failCase'><div class='testcase'>test_api_getAccountsRelBrokerByUid_request_00001_获取成功_正确的uid_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.19')" >
+        失败</a>
+
+    <div id='div_ft1.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.19: http://218.244.157.23:8090/server/api/getAccountsRelBrokerByUid?uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"BrokerFullName":"UNION STANDARD","BrokerId":2,"MasterBrokerId":1156,"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},{"BrokerFullName":"MetaTrader 4 IC Markets","BrokerId":3,"MasterBrokerId":917,"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},{"BrokerFullName":"UNION STANDARD","BrokerId":2,"MasterBrokerId":1156,"AccountId":4913,"Uid":20162846,"AccountName":"200095065","AccountNumber":200095065,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":0,"ConnecStatus":4,"RssStatus":0,"Index":3,"Rank":0,"MELevel":5}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 221, in test_api_getAccountsRelBrokerByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"B[418 chars]nk":54,"MELevel":5},{"BrokerFullName":"MetaTra[863 chars]:5}]' != '[{"B[418 chars]nk":55,"MELevel":5},{"BrokerFullName":"MetaTra[863 chars]:5}]'
+Diff is 4445 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.20'>
+    <td class='none'><div class='testcase'>test_api_getAccountsRelBrokerByUid_request_00002_获取失败_错误的uid_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.20')" >
+        通过</a>
+
+    <div id='div_pt1.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.20: http://218.244.157.23:8090/server/api/getAccountsRelBrokerByUid?uid=20165010
+{'code': 0, 'message': '获取失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.21'>
+    <td class='none'><div class='testcase'>test_api_getBindingSituationByUid_request_00001_正确的uid_版本为1_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.21')" >
+        通过</a>
+
+    <div id='div_pt1.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.21: http://218.244.157.23:8090/server/api/getBindingSituationByUid?uid=20165469&amp;versions=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"sendSituation":2}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.22'>
+    <td class='none'><div class='testcase'>test_api_getBindingSituationByUid_request_00002_正确的uid_版本为0_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.22')" >
+        通过</a>
+
+    <div id='div_pt1.22' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.22').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.22: http://218.244.157.23:8090/server/api/getBindingSituationByUid?uid=20163599&amp;versions=0
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"sendSituation":1}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.23'>
+    <td class='failCase'><div class='testcase'>test_api_getBindingSituationByUid_request_00003_错误的uid_版本为1_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.23')" >
+        失败</a>
+
+    <div id='div_ft1.23' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.23').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.23: http://218.244.157.23:8090/server/api/getBindingSituationByUid?uid=101699&amp;versions=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"sendSituation":1}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 89, in test_api_getBindingSituationByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"sendSituation":1}' != '[]'
+- {"sendSituation":1}
++ []
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.24'>
+    <td class='none'><div class='testcase'>test_api_getBrokerRank_request_00001_操作成功_查询所有_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.24')" >
+        通过</a>
+
+    <div id='div_pt1.24' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.24').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.24: http://218.244.157.23:8090/server/api/getBrokerRank
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"Id":23,"MasterBrokerId":1042,"BrokerName":"ForexTime富拓","BrokerFullName":"ForexTime (FXTM) MT4,ForexTime MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095637191.png","Status":1},{"Id":3,"MasterBrokerId":917,"BrokerName":"IC Markets","BrokerFullName":"MetaTrader 4 IC Markets","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","Status":1},{"Id":18,"MasterBrokerId":24,"BrokerName":"Alpari艾福瑞","BrokerFullName":"Alpari MT4,myAlpari","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095611441.png","Status":1},{"Id":171,"MasterBrokerId":1035,"BrokerName":"ACY稀万","BrokerFullName":"ACY FX Australia MetaTrader 4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054324339.png","Status":1},{"Id":48,"MasterBrokerId":26,"BrokerName":"LCG","BrokerFullName":"MetaTrader - London Capital Group Ltd,MetaTrader -","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095841097.png","Status":1},{"Id":2,"MasterBrokerId":1156,"BrokerName":"USGFX","BrokerFullName":"UNION STANDARD","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","Status":1},{"Id":1,"MasterBrokerId":707,"BrokerName":"XM","BrokerFullName":"XM MT4,XM Global MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095310175.png","Status":1},{"Id":11,"MasterBrokerId":132,"BrokerName":"ICM Capital","BrokerFullName":"ICMcapital.ltd","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095511207.png","Status":1},{"Id":66,"MasterBrokerId":1349,"BrokerName":"InfinoxCapital英诺","BrokerFullName":"Infinox Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170612143000882.png","Status":1},{"Id":12,"MasterBrokerId":1065,"BrokerName":"SVSFX","BrokerFullName":"MetaTrader - SVSFX","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095518175.png","Status":1},{"Id":224,"MasterBrokerId":3127,"BrokerName":"DVMarkets","BrokerFullName":"DV Markets","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/02/104955174.png","Status":1},{"Id":4,"MasterBrokerId":1300,"BrokerName":"BMFN","BrokerFullName":"BMFN MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095412910.png","Status":1},{"Id":5,"MasterBrokerId":1064,"BrokerName":"ATC Brokers","BrokerFullName":"ATC Brokers MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095421613.png","Status":1},{"Id":6,"MasterBrokerId":201,"BrokerName":"ETX Capital","BrokerFullName":"ETX Capital MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095430613.png","Status":1},{"Id":7,"MasterBrokerId":22,"BrokerName":"FXCM福汇","BrokerFullName":"FXCM MetaTrader 4,FXCM MetaTrader4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095440238.png","Status":1},{"Id":8,"MasterBrokerId":34,"BrokerName":"FXDD","BrokerFullName":"FXDD Malta - MetaTrader 4,FXDD - MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095449269.png","Status":1},{"Id":9,"MasterBrokerId":37,"BrokerName":"Exness","BrokerFullName":"MetaTrader - EXNESS,Exness (CY) MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095502644.png","Status":1},{"Id":10,"MasterBrokerId":1242,"BrokerName":"Eightcap易汇","BrokerFullName":"Eightcap MetaTrader 4 Terminal,澳洲易汇","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718141915481.png","Status":1},{"Id":13,"MasterBrokerId":1049,"BrokerName":"ThinkMarkets","BrokerFullName":"ThinkMarkets MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095525097.png","Status":1},{"Id":14,"MasterBrokerId":67,"BrokerName":"GKFX捷凯","BrokerFullName":"GKFX MetaTrader 4,GKFX Prime MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095543222.png","Status":1},{"Id":15,"MasterBrokerId":1493,"BrokerName":"Tickmill","BrokerFullName":"Tickmill,Tickmill MT4 Client Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095550503.png","Status":1},{"Id":16,"MasterBrokerId":1333,"BrokerName":"GMI","BrokerFullName":"GMI MetaTrader 4,MetaTrader 4 GMI","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718141944481.png","Status":1},{"Id":17,"MasterBrokerId":21,"BrokerName":"欧福市场","BrokerFullName":"MetaTrader - One Financial,欧服市场,欧福市场,欧福","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095601097.png","Status":1},{"Id":19,"MasterBrokerId":137,"BrokerName":"ForexClub","BrokerFullName":"ForexClub-MT4,ForexClub MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095619847.png","Status":1},{"Id":22,"MasterBrokerId":1085,"BrokerName":"VantageFX万致","BrokerFullName":"Vantage AU MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095628707.png","Status":1},{"Id":24,"MasterBrokerId":127,"BrokerName":"Activtrades","BrokerFullName":"MetaTrader - ActivTrades","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095646972.png","Status":1},{"Id":25,"MasterBrokerId":36,"BrokerName":"AdmiralMarkets艾迪麦","BrokerFullName":"MetaTrader 4 Admiral Markets","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095655378.png","Status":1},{"Id":27,"MasterBrokerId":68,"BrokerName":"AETOS艾拓思","BrokerFullName":"AETOS MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095708660.png","Status":1},{"Id":28,"MasterBrokerId":1051,"BrokerName":"AvaTrade爱华","BrokerFullName":"Ava MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095717128.png","Status":1},{"Id":29,"MasterBrokerId":1924,"BrokerName":"AxiTrader","BrokerFullName":"MetaTrader - AxiTrader China","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095724660.png","Status":1},{"Id":30,"MasterBrokerId":39,"BrokerName":"FXPRO","BrokerFullName":"FxPro - MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png","Status":1},{"Id":31,"MasterBrokerId":1075,"BrokerName":"FXCC","BrokerFullName":"FXCC - MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095756238.png","Status":1},{"Id":32,"MasterBrokerId":38,"BrokerName":"EasyForex易信","BrokerFullName":"MT4 at easy-forex","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095804300.png","Status":1},{"Id":33,"MasterBrokerId":1059,"BrokerName":"FIBO飞博","BrokerFullName":"FIBO Group，FIBO Group Holdings Limited","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170612153029147.png","Status":1},{"Id":34,"MasterBrokerId":1338,"BrokerName":"TradeMax","BrokerFullName":"TradeMax Capital MT4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171207153630264.png","Status":1},{"Id":35,"MasterBrokerId":1786,"BrokerName":"Darwinex","BrokerFullName":"Darwinex MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095821331.png","Status":1},{"Id":49,"MasterBrokerId":157,"BrokerName":"Windsor温莎","BrokerFullName":"Windsor MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/4/20180420102006255.png","Status":1},{"Id":52,"MasterBrokerId":919,"BrokerName":"Orbex","BrokerFullName":"Orbex Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095858019.png","Status":1},{"Id":54,"MasterBrokerId":1188,"BrokerName":"RoboForex","BrokerFullName":"MetaTrader 4 - RoboForex EU,RoboForex - MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095909394.png","Status":1},{"Id":55,"MasterBrokerId":141,"BrokerName":"Swissquote瑞讯","BrokerFullName":"Swissquote Bank MT4 Client Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png","Status":1},{"Id":57,"MasterBrokerId":126,"BrokerName":"IG","BrokerFullName":"IG MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095930019.png","Status":1},{"Id":59,"MasterBrokerId":1058,"BrokerName":"Hirose FinancialLtd","BrokerFullName":"HiroseFinancialLtd-MT4,LION MetaTrader4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095938035.png","Status":1},{"Id":61,"MasterBrokerId":1053,"BrokerName":"Pepperstone","BrokerFullName":"Pepperstone MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095949472.png","Status":1},{"Id":76,"MasterBrokerId":2341,"BrokerName":"Charterprime卓德","BrokerFullName":"Charterprime MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613102635757.png","Status":1},{"Id":84,"MasterBrokerId":155,"BrokerName":"Deltastock","BrokerFullName":"Deltastock MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613112122319.png","Status":1},{"Id":86,"MasterBrokerId":1073,"BrokerName":"DirectFX","BrokerFullName":"Direct FX MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613114036569.png","Status":1},{"Id":96,"MasterBrokerId":30,"BrokerName":"Forex.com嘉盛","BrokerFullName":"MetaTrader 4 at FOREX.com CN,FOREX.com UK CN MetaT","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613145947022.png","Status":1},{"Id":99,"MasterBrokerId":2087,"BrokerName":"ForTrade","BrokerFullName":"ForTrade MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613152547632.png","Status":1},{"Id":108,"MasterBrokerId":1998,"BrokerName":"FxGrow","BrokerFullName":"FxGrow Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613163754804.png","Status":1},{"Id":109,"MasterBrokerId":1050,"BrokerName":"FXOpen","BrokerFullName":"MetaTrader - FXOpen,MetaTrader ECN - FXOpen","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613164130460.png","Status":1},{"Id":110,"MasterBrokerId":1790,"BrokerName":"Fx Primus","BrokerFullName":"FX Primus MetaTrader 4 Terminal,Primus Markets MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613165924163.png","Status":1},{"Id":123,"MasterBrokerId":6,"BrokerName":"HYCM兴业投资","BrokerFullName":"HY Trader,HYCM","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170614101520554.png","Status":1},{"Id":159,"MasterBrokerId":967,"BrokerName":"ADS达汇","BrokerFullName":"ADS MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620101154300.png","Status":1},{"Id":160,"MasterBrokerId":1043,"BrokerName":"KVB Kunlun昆仑国际","BrokerFullName":"ForexStar 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620103359316.png","Status":1},{"Id":162,"MasterBrokerId":711,"BrokerName":"STO世透国际","BrokerFullName":"STO MT4,AFX Capital MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620113046238.png","Status":1},{"Id":163,"MasterBrokerId":2344,"BrokerName":"FBS","BrokerFullName":"FBS Trader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620115434816.png","Status":1},{"Id":164,"MasterBrokerId":1928,"BrokerName":"Go Markets高汇","BrokerFullName":"GO Markets MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620135321378.png","Status":1},{"Id":165,"MasterBrokerId":1372,"BrokerName":"FPMarkets","BrokerFullName":"FPMarkets MT4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620145118019.png","Status":1},{"Id":166,"MasterBrokerId":1532,"BrokerName":"亨达外汇","BrokerFullName":"MT4 Hantec Markets Australia Pty Limited,MT4 Hante","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620145851550.png","Status":1},{"Id":167,"MasterBrokerId":1450,"BrokerName":"OriginECN","BrokerFullName":"OriginECN MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170624160728301.png","Status":1},{"Id":169,"MasterBrokerId":1367,"BrokerName":"Alpha Capital阿尔法","BrokerFullName":"Alpha Capital Markets Plc","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/7/20170703193335098.png","Status":1},{"Id":170,"MasterBrokerId":1359,"BrokerName":"Bacera百汇","BrokerFullName":"BACERA PRO TRADER,BCR","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054143292.png","Status":1},{"Id":172,"MasterBrokerId":1047,"BrokerName":"KAB三甲","BrokerFullName":"KAB-MetaTrader 4 Client Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054450121.png","Status":1},{"Id":173,"MasterBrokerId":1311,"BrokerName":"Tri拓利","BrokerFullName":"Tri MetaTrader4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718142048293.png","Status":1},{"Id":175,"MasterBrokerId":1069,"BrokerName":"LMAX","BrokerFullName":"LMAX Global MetaTrader 4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120313705.png","Status":1},{"Id":176,"MasterBrokerId":2343,"BrokerName":"XTrade","BrokerFullName":"XTR.INT MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120333143.png","Status":1},{"Id":177,"MasterBrokerId":1971,"BrokerName":"Teletrade特理汇","BrokerFullName":"TeleTRADE MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721112813911.png","Status":1},{"Id":178,"MasterBrokerId":1993,"BrokerName":"NordFX诺德","BrokerFullName":"MetaTrader 4 NordFX","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120359221.png","Status":1},{"Id":179,"MasterBrokerId":2058,"BrokerName":"MEX Group大通","BrokerFullName":"MEX MAXIMUS MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120417502.png","Status":1},{"Id":180,"MasterBrokerId":2345,"BrokerName":"ForexCT","BrokerFullName":"ForexCT MetaTrader4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120434158.png","Status":1},{"Id":182,"MasterBrokerId":1048,"BrokerName":"Z.comTradeUK","BrokerFullName":"GMO-Z.com Trade Limited,Z.com Trade MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120503830.png","Status":1},{"Id":183,"MasterBrokerId":1072,"BrokerName":"CityIndex","BrokerFullName":"City Index - MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042051407.png","Status":1},{"Id":185,"MasterBrokerId":1082,"BrokerName":"Just2Trade","BrokerFullName":"Just2Trade MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042454532.png","Status":1},{"Id":186,"MasterBrokerId":1787,"BrokerName":"MARKETS.COM迈肯司","BrokerFullName":"STA Global Investments MetaTrader","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042638610.png","Status":1},{"Id":187,"MasterBrokerId":1531,"BrokerName":"Synergy FX","BrokerFullName":"Synergy-FX MetaTrader","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170728161603209.png","Status":1},{"Id":188,"MasterBrokerId":1491,"BrokerName":"BenefitZoneFX","BrokerFullName":"Benefit MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/8/20170802165119610.png","Status":1},{"Id":189,"MasterBrokerId":2051,"BrokerName":"SwissMarkets","BrokerFullName":"Swiss Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/9/20170919192124666.png","Status":1},{"Id":190,"MasterBrokerId":140,"BrokerName":"FTT Global","BrokerFullName":"FTT Global MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/9/20170921165038322.png","Status":1},{"Id":191,"MasterBrokerId":1530,"BrokerName":"LionFinancialGroup","BrokerFullName":"LION MetaTrader4,Lion Brokers Limited","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/10/20171012145536756.png","Status":1},{"Id":192,"MasterBrokerId":2063,"BrokerName":"CityofLondonMarkets","BrokerFullName":"City of London Markets","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171208140603012.png","Status":1},{"Id":193,"MasterBrokerId":1529,"BrokerName":"RubixFX","BrokerFullName":"Rubix FX MetaTrader 4,格伦外汇","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171219093301240.png","Status":1},{"Id":194,"MasterBrokerId":1528,"BrokerName":"OGFX","BrokerFullName":"Ocean Global Markets MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171227191426446.png","Status":1},{"Id":195,"MasterBrokerId":1672,"BrokerName":"ATFX","BrokerFullName":"ATFXGM MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180309144522179.png","Status":1},{"Id":196,"MasterBrokerId":2346,"BrokerName":"TahoeGroup","BrokerFullName":"TahoeFX MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180314155725920.png","Status":1},{"Id":197,"MasterBrokerId":2342,"BrokerName":"GTS Forex","BrokerFullName":"GTS PRIME MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180326193551769.png","Status":1},{"Id":198,"MasterBrokerId":2102,"BrokerName":"Valutrades","BrokerFullName":"Valutrades MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180612142027486.png","Status":1},{"Id":199,"MasterBrokerId":1652,"BrokerName":"Millennium Alpha","BrokerFullName":"Millennium Alpha MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180612190903274.png","Status":1},{"Id":200,"MasterBrokerId":1601,"BrokerName":"Halifax","BrokerFullName":"MetaTrader 4 - Halifax Pro","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180615165800370.png","Status":1},{"Id":201,"MasterBrokerId":2359,"BrokerName":"TBC海湾资本","BrokerFullName":"TBC MT4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180615191245677.png","Status":1},{"Id":203,"MasterBrokerId":1793,"BrokerName":"Formax","BrokerFullName":"Formax Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180623102025482.png","Status":1},{"Id":204,"MasterBrokerId":2420,"BrokerName":"Myfx Markets","BrokerFullName":"Myfx Markets MetaTrader 4,Myfx Markets","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180625113718197.png","Status":1},{"Id":205,"MasterBrokerId":1808,"BrokerName":"Koderan International","BrokerFullName":"Koderan MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180628144348344.png","Status":1},{"Id":206,"MasterBrokerId":2881,"BrokerName":"奥弗国际","BrokerFullName":"Honorfalcon Global MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180702085748145.png","Status":1},{"Id":207,"MasterBrokerId":2758,"BrokerName":"Geedey Capital","BrokerFullName":"Geedey Capital MT4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180704183956827.png","Status":1},{"Id":208,"MasterBrokerId":0,"BrokerName":"TCC","BrokerFullName":"Top Capital Corporation TCC","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180704192148958.png","Status":1},{"Id":209,"MasterBrokerId":2777,"BrokerName":"VT Markets","BrokerFullName":"VT Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180705110423775.png","Status":1},{"Id":210,"MasterBrokerId":1883,"BrokerName":"IFM Trade","BrokerFullName":"IFM Trade","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180710093750585.png","Status":1},{"Id":211,"MasterBrokerId":2036,"BrokerName":"Royal皇家","BrokerFullName":"Royal Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180711194256660.png","Status":1},{"Id":212,"MasterBrokerId":0,"BrokerName":"BLMarketsLtd","BrokerFullName":"BL Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180711195111720.png","Status":1},{"Id":213,"MasterBrokerId":1664,"BrokerName":"Wiston Global","BrokerFullName":"Wiston Global Limited","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180712104742087.png","Status":1},{"Id":214,"MasterBrokerId":2647,"BrokerName":"AisaFX","BrokerFullName":"Aisa International Group MT4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180712105502998.png","Status":1},{"Id":215,"MasterBrokerId":2844,"BrokerName":"CPT Markets","BrokerFullName":"CPT Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180717140426507.png","Status":1},{"Id":216,"MasterBrokerId":2366,"BrokerName":"Wetrade众汇","BrokerFullName":"Wetrade MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180717142856574.png","Status":1},{"Id":217,"MasterBrokerId":2062,"BrokerName":"TigerWit","BrokerFullName":"Tiger Wit- MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180720154123954.png","Status":1},{"Id":218,"MasterBrokerId":2466,"BrokerName":"AnzoCapital","BrokerFullName":"Anzo Capital Limited","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180720155250927.png","Status":1},{"Id":219,"MasterBrokerId":2060,"BrokerName":"CapstoneGlobal","BrokerFullName":"Capstone MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180816155020353.png","Status":1},{"Id":220,"MasterBrokerId":854,"BrokerName":"Blackwell Global","BrokerFullName":"Blackwell Global Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180824170121741.png","Status":1},{"Id":221,"MasterBrokerId":3027,"BrokerName":"OxfordForex","BrokerFullName":"OxfordForex MT4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180828151915550.png","Status":1},{"Id":222,"MasterBrokerId":2799,"BrokerName":"Cardiff Global","BrokerFullName":"Cardiff Global MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/9/20180913135515381.png","Status":1},{"Id":223,"MasterBrokerId":28,"BrokerName":"OANDA","BrokerFullName":"OANDA - MetaTrader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/9/20180921212626044.png","Status":1},{"Id":225,"MasterBrokerId":1791,"BrokerName":"Amana Capital阿曼那资本","BrokerFullName":"Amana Capital Trader","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/05/165542669.png","Status":1},{"Id":226,"MasterBrokerId":1789,"BrokerName":"TeraFx特汇","BrokerFullName":"Tera Europe Limited","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/21/144429303.png","Status":1},{"Id":227,"MasterBrokerId":1906,"BrokerName":"Brickhill eX","BrokerFullName":"Brickhill eX","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/22/165144517.png","Status":1},{"Id":229,"MasterBrokerId":3102,"BrokerName":"IRC Groups Limited","BrokerFullName":"MetaTrader 4 IRC Groups","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/105907505.png","Status":1},{"Id":230,"MasterBrokerId":3238,"BrokerName":"IX 证券","BrokerFullName":"IX Securities MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/110427175.png","Status":1},{"Id":231,"MasterBrokerId":3109,"BrokerName":"Gemini Capital Markets","BrokerFullName":"Gemini Capital Markets MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/111643373.png","Status":1},{"Id":233,"MasterBrokerId":1902,"BrokerName":"HotForex","BrokerFullName":"HotForex MetaTrader","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/114425025.png","Status":1},{"Id":234,"MasterBrokerId":1668,"BrokerName":"Pacific Financial Derivatives","BrokerFullName":"MetaTrader 4 Client Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/115550357.png","Status":1},{"Id":235,"MasterBrokerId":1796,"BrokerName":"ETO Markets","BrokerFullName":"ETO Markets","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/120138672.png","Status":1},{"Id":236,"MasterBrokerId":2349,"BrokerName":"INGOT Brokers","BrokerFullName":"Ingot Station","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/134347416.png","Status":1},{"Id":237,"MasterBrokerId":1867,"BrokerName":"Unicorn Finance","BrokerFullName":"Unicorn Finance MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/140434080.png","Status":1},{"Id":238,"MasterBrokerId":2282,"BrokerName":"友邦外汇","BrokerFullName":"Finance Managers MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/140822300.png","Status":1},{"Id":239,"MasterBrokerId":1792,"BrokerName":"AGM Markets","BrokerFullName":"AGM - MetaTrader 4 Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/145726880.png","Status":1},{"Id":240,"MasterBrokerId":3222,"BrokerName":"山海证券","BrokerFullName":"ZEAL MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/07/095343979.png","Status":1},{"Id":241,"MasterBrokerId":3249,"BrokerName":"GS Deep Ocean PTY LTD","BrokerFullName":"GSDO Group MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/08/155736421.png","Status":1},{"Id":242,"MasterBrokerId":159,"BrokerName":"Velocity","BrokerFullName":"Velocity Global MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/20/134129902.png","Status":1},{"Id":243,"MasterBrokerId":1462,"BrokerName":"BP PRIME","BrokerFullName":"BP Prime MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/02/095415515.png","Status":1},{"Id":244,"MasterBrokerId":1994,"BrokerName":"GCMAsia","BrokerFullName":"GCM Asia MT4 Client Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/07/142244482.png","Status":1},{"Id":245,"MasterBrokerId":140,"BrokerName":"Dukascopy","BrokerFullName":"Dukascopy MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/14/161414321.png","Status":1},{"Id":246,"MasterBrokerId":3356,"BrokerName":"IFS Markets","BrokerFullName":"IFS Markets - MetaTrader","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/02/15/100612879.png","Status":1},{"Id":247,"MasterBrokerId":2059,"BrokerName":"Tradeview","BrokerFullName":"Tradeview MetaTrader 4 Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/02/27/164915008.png","Status":1}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.25'>
+    <td class='none'><div class='testcase'>test_api_getBrokerRank_request_00002_操作成功_查询1条_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.25')" >
+        通过</a>
+
+    <div id='div_pt1.25' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.25').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.25: http://218.244.157.23:8090/server/api/getBrokerRank?topSize=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"Id":23,"MasterBrokerId":1042,"BrokerName":"ForexTime富拓","BrokerFullName":"ForexTime (FXTM) MT4,ForexTime MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095637191.png","Status":1},{"Id":3,"MasterBrokerId":917,"BrokerName":"IC Markets","BrokerFullName":"MetaTrader 4 IC Markets","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","Status":1},{"Id":18,"MasterBrokerId":24,"BrokerName":"Alpari艾福瑞","BrokerFullName":"Alpari MT4,myAlpari","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095611441.png","Status":1},{"Id":171,"MasterBrokerId":1035,"BrokerName":"ACY稀万","BrokerFullName":"ACY FX Australia MetaTrader 4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054324339.png","Status":1},{"Id":48,"MasterBrokerId":26,"BrokerName":"LCG","BrokerFullName":"MetaTrader - London Capital Group Ltd,MetaTrader -","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095841097.png","Status":1},{"Id":2,"MasterBrokerId":1156,"BrokerName":"USGFX","BrokerFullName":"UNION STANDARD","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","Status":1},{"Id":1,"MasterBrokerId":707,"BrokerName":"XM","BrokerFullName":"XM MT4,XM Global MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095310175.png","Status":1},{"Id":11,"MasterBrokerId":132,"BrokerName":"ICM Capital","BrokerFullName":"ICMcapital.ltd","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095511207.png","Status":1},{"Id":66,"MasterBrokerId":1349,"BrokerName":"InfinoxCapital英诺","BrokerFullName":"Infinox Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170612143000882.png","Status":1},{"Id":12,"MasterBrokerId":1065,"BrokerName":"SVSFX","BrokerFullName":"MetaTrader - SVSFX","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095518175.png","Status":1},{"Id":224,"MasterBrokerId":3127,"BrokerName":"DVMarkets","BrokerFullName":"DV Markets","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/02/104955174.png","Status":1},{"Id":4,"MasterBrokerId":1300,"BrokerName":"BMFN","BrokerFullName":"BMFN MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095412910.png","Status":1},{"Id":5,"MasterBrokerId":1064,"BrokerName":"ATC Brokers","BrokerFullName":"ATC Brokers MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095421613.png","Status":1},{"Id":6,"MasterBrokerId":201,"BrokerName":"ETX Capital","BrokerFullName":"ETX Capital MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095430613.png","Status":1},{"Id":7,"MasterBrokerId":22,"BrokerName":"FXCM福汇","BrokerFullName":"FXCM MetaTrader 4,FXCM MetaTrader4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095440238.png","Status":1},{"Id":8,"MasterBrokerId":34,"BrokerName":"FXDD","BrokerFullName":"FXDD Malta - MetaTrader 4,FXDD - MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095449269.png","Status":1},{"Id":9,"MasterBrokerId":37,"BrokerName":"Exness","BrokerFullName":"MetaTrader - EXNESS,Exness (CY) MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095502644.png","Status":1},{"Id":10,"MasterBrokerId":1242,"BrokerName":"Eightcap易汇","BrokerFullName":"Eightcap MetaTrader 4 Terminal,澳洲易汇","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718141915481.png","Status":1},{"Id":13,"MasterBrokerId":1049,"BrokerName":"ThinkMarkets","BrokerFullName":"ThinkMarkets MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095525097.png","Status":1},{"Id":14,"MasterBrokerId":67,"BrokerName":"GKFX捷凯","BrokerFullName":"GKFX MetaTrader 4,GKFX Prime MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095543222.png","Status":1},{"Id":15,"MasterBrokerId":1493,"BrokerName":"Tickmill","BrokerFullName":"Tickmill,Tickmill MT4 Client Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095550503.png","Status":1},{"Id":16,"MasterBrokerId":1333,"BrokerName":"GMI","BrokerFullName":"GMI MetaTrader 4,MetaTrader 4 GMI","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718141944481.png","Status":1},{"Id":17,"MasterBrokerId":21,"BrokerName":"欧福市场","BrokerFullName":"MetaTrader - One Financial,欧服市场,欧福市场,欧福","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095601097.png","Status":1},{"Id":19,"MasterBrokerId":137,"BrokerName":"ForexClub","BrokerFullName":"ForexClub-MT4,ForexClub MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095619847.png","Status":1},{"Id":22,"MasterBrokerId":1085,"BrokerName":"VantageFX万致","BrokerFullName":"Vantage AU MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095628707.png","Status":1},{"Id":24,"MasterBrokerId":127,"BrokerName":"Activtrades","BrokerFullName":"MetaTrader - ActivTrades","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095646972.png","Status":1},{"Id":25,"MasterBrokerId":36,"BrokerName":"AdmiralMarkets艾迪麦","BrokerFullName":"MetaTrader 4 Admiral Markets","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095655378.png","Status":1},{"Id":27,"MasterBrokerId":68,"BrokerName":"AETOS艾拓思","BrokerFullName":"AETOS MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095708660.png","Status":1},{"Id":28,"MasterBrokerId":1051,"BrokerName":"AvaTrade爱华","BrokerFullName":"Ava MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095717128.png","Status":1},{"Id":29,"MasterBrokerId":1924,"BrokerName":"AxiTrader","BrokerFullName":"MetaTrader - AxiTrader China","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095724660.png","Status":1},{"Id":30,"MasterBrokerId":39,"BrokerName":"FXPRO","BrokerFullName":"FxPro - MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png","Status":1},{"Id":31,"MasterBrokerId":1075,"BrokerName":"FXCC","BrokerFullName":"FXCC - MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095756238.png","Status":1},{"Id":32,"MasterBrokerId":38,"BrokerName":"EasyForex易信","BrokerFullName":"MT4 at easy-forex","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095804300.png","Status":1},{"Id":33,"MasterBrokerId":1059,"BrokerName":"FIBO飞博","BrokerFullName":"FIBO Group，FIBO Group Holdings Limited","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170612153029147.png","Status":1},{"Id":34,"MasterBrokerId":1338,"BrokerName":"TradeMax","BrokerFullName":"TradeMax Capital MT4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171207153630264.png","Status":1},{"Id":35,"MasterBrokerId":1786,"BrokerName":"Darwinex","BrokerFullName":"Darwinex MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095821331.png","Status":1},{"Id":49,"MasterBrokerId":157,"BrokerName":"Windsor温莎","BrokerFullName":"Windsor MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/4/20180420102006255.png","Status":1},{"Id":52,"MasterBrokerId":919,"BrokerName":"Orbex","BrokerFullName":"Orbex Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095858019.png","Status":1},{"Id":54,"MasterBrokerId":1188,"BrokerName":"RoboForex","BrokerFullName":"MetaTrader 4 - RoboForex EU,RoboForex - MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095909394.png","Status":1},{"Id":55,"MasterBrokerId":141,"BrokerName":"Swissquote瑞讯","BrokerFullName":"Swissquote Bank MT4 Client Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095916910.png","Status":1},{"Id":57,"MasterBrokerId":126,"BrokerName":"IG","BrokerFullName":"IG MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095930019.png","Status":1},{"Id":59,"MasterBrokerId":1058,"BrokerName":"Hirose FinancialLtd","BrokerFullName":"HiroseFinancialLtd-MT4,LION MetaTrader4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095938035.png","Status":1},{"Id":61,"MasterBrokerId":1053,"BrokerName":"Pepperstone","BrokerFullName":"Pepperstone MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095949472.png","Status":1},{"Id":76,"MasterBrokerId":2341,"BrokerName":"Charterprime卓德","BrokerFullName":"Charterprime MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613102635757.png","Status":1},{"Id":84,"MasterBrokerId":155,"BrokerName":"Deltastock","BrokerFullName":"Deltastock MetaTrader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613112122319.png","Status":1},{"Id":86,"MasterBrokerId":1073,"BrokerName":"DirectFX","BrokerFullName":"Direct FX MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613114036569.png","Status":1},{"Id":96,"MasterBrokerId":30,"BrokerName":"Forex.com嘉盛","BrokerFullName":"MetaTrader 4 at FOREX.com CN,FOREX.com UK CN MetaT","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613145947022.png","Status":1},{"Id":99,"MasterBrokerId":2087,"BrokerName":"ForTrade","BrokerFullName":"ForTrade MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613152547632.png","Status":1},{"Id":108,"MasterBrokerId":1998,"BrokerName":"FxGrow","BrokerFullName":"FxGrow Trader","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613163754804.png","Status":1},{"Id":109,"MasterBrokerId":1050,"BrokerName":"FXOpen","BrokerFullName":"MetaTrader - FXOpen,MetaTrader ECN - FXOpen","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613164130460.png","Status":1},{"Id":110,"MasterBrokerId":1790,"BrokerName":"Fx Primus","BrokerFullName":"FX Primus MetaTrader 4 Terminal,Primus Markets MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170613165924163.png","Status":1},{"Id":123,"MasterBrokerId":6,"BrokerName":"HYCM兴业投资","BrokerFullName":"HY Trader,HYCM","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170614101520554.png","Status":1},{"Id":159,"MasterBrokerId":967,"BrokerName":"ADS达汇","BrokerFullName":"ADS MetaTrader 4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620101154300.png","Status":1},{"Id":160,"MasterBrokerId":1043,"BrokerName":"KVB Kunlun昆仑国际","BrokerFullName":"ForexStar 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620103359316.png","Status":1},{"Id":162,"MasterBrokerId":711,"BrokerName":"STO世透国际","BrokerFullName":"STO MT4,AFX Capital MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620113046238.png","Status":1},{"Id":163,"MasterBrokerId":2344,"BrokerName":"FBS","BrokerFullName":"FBS Trader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620115434816.png","Status":1},{"Id":164,"MasterBrokerId":1928,"BrokerName":"Go Markets高汇","BrokerFullName":"GO Markets MT4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620135321378.png","Status":1},{"Id":165,"MasterBrokerId":1372,"BrokerName":"FPMarkets","BrokerFullName":"FPMarkets MT4 Terminal","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620145118019.png","Status":1},{"Id":166,"MasterBrokerId":1532,"BrokerName":"亨达外汇","BrokerFullName":"MT4 Hantec Markets Australia Pty Limited,MT4 Hante","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620145851550.png","Status":1},{"Id":167,"MasterBrokerId":1450,"BrokerName":"OriginECN","BrokerFullName":"OriginECN MetaTrader 4","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170624160728301.png","Status":1},{"Id":169,"MasterBrokerId":1367,"BrokerName":"Alpha Capital阿尔法","BrokerFullName":"Alpha Capital Markets Plc","Logo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/7/20170703193335098.png","Status":1},{"Id":170,"MasterBrokerId":1359,"BrokerName":"Bacera百汇","BrokerFullName":"BACERA PRO TRADER,BCR","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054143292.png","Status":1},{"Id":172,"MasterBrokerId":1047,"BrokerName":"KAB三甲","BrokerFullName":"KAB-MetaTrader 4 Client Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718054450121.png","Status":1},{"Id":173,"MasterBrokerId":1311,"BrokerName":"Tri拓利","BrokerFullName":"Tri MetaTrader4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170718142048293.png","Status":1},{"Id":175,"MasterBrokerId":1069,"BrokerName":"LMAX","BrokerFullName":"LMAX Global MetaTrader 4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120313705.png","Status":1},{"Id":176,"MasterBrokerId":2343,"BrokerName":"XTrade","BrokerFullName":"XTR.INT MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120333143.png","Status":1},{"Id":177,"MasterBrokerId":1971,"BrokerName":"Teletrade特理汇","BrokerFullName":"TeleTRADE MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721112813911.png","Status":1},{"Id":178,"MasterBrokerId":1993,"BrokerName":"NordFX诺德","BrokerFullName":"MetaTrader 4 NordFX","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120359221.png","Status":1},{"Id":179,"MasterBrokerId":2058,"BrokerName":"MEX Group大通","BrokerFullName":"MEX MAXIMUS MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120417502.png","Status":1},{"Id":180,"MasterBrokerId":2345,"BrokerName":"ForexCT","BrokerFullName":"ForexCT MetaTrader4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120434158.png","Status":1},{"Id":182,"MasterBrokerId":1048,"BrokerName":"Z.comTradeUK","BrokerFullName":"GMO-Z.com Trade Limited,Z.com Trade MT4","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170721120503830.png","Status":1},{"Id":183,"MasterBrokerId":1072,"BrokerName":"CityIndex","BrokerFullName":"City Index - MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042051407.png","Status":1},{"Id":185,"MasterBrokerId":1082,"BrokerName":"Just2Trade","BrokerFullName":"Just2Trade MT4 Terminal","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042454532.png","Status":1},{"Id":186,"MasterBrokerId":1787,"BrokerName":"MARKETS.COM迈肯司","BrokerFullName":"STA Global Investments MetaTrader","Logo":"https://fxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170719042638610.png","Status":1},{"Id":187,"MasterBrokerId":1531,"BrokerName":"Synergy FX","BrokerFullName":"Synergy-FX MetaTrader","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/7/20170728161603209.png","Status":1},{"Id":188,"MasterBrokerId":1491,"BrokerName":"BenefitZoneFX","BrokerFullName":"Benefit MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/8/20170802165119610.png","Status":1},{"Id":189,"MasterBrokerId":2051,"BrokerName":"SwissMarkets","BrokerFullName":"Swiss Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/9/20170919192124666.png","Status":1},{"Id":190,"MasterBrokerId":140,"BrokerName":"FTT Global","BrokerFullName":"FTT Global MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/9/20170921165038322.png","Status":1},{"Id":191,"MasterBrokerId":1530,"BrokerName":"LionFinancialGroup","BrokerFullName":"LION MetaTrader4,Lion Brokers Limited","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/10/20171012145536756.png","Status":1},{"Id":192,"MasterBrokerId":2063,"BrokerName":"CityofLondonMarkets","BrokerFullName":"City of London Markets","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171208140603012.png","Status":1},{"Id":193,"MasterBrokerId":1529,"BrokerName":"RubixFX","BrokerFullName":"Rubix FX MetaTrader 4,格伦外汇","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171219093301240.png","Status":1},{"Id":194,"MasterBrokerId":1528,"BrokerName":"OGFX","BrokerFullName":"Ocean Global Markets MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2017/12/20171227191426446.png","Status":1},{"Id":195,"MasterBrokerId":1672,"BrokerName":"ATFX","BrokerFullName":"ATFXGM MT4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180309144522179.png","Status":1},{"Id":196,"MasterBrokerId":2346,"BrokerName":"TahoeGroup","BrokerFullName":"TahoeFX MetaTrader 4","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180314155725920.png","Status":1},{"Id":197,"MasterBrokerId":2342,"BrokerName":"GTS Forex","BrokerFullName":"GTS PRIME MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com//api/SecrecyMaster/Default/2018/3/20180326193551769.png","Status":1},{"Id":198,"MasterBrokerId":2102,"BrokerName":"Valutrades","BrokerFullName":"Valutrades MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180612142027486.png","Status":1},{"Id":199,"MasterBrokerId":1652,"BrokerName":"Millennium Alpha","BrokerFullName":"Millennium Alpha MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180612190903274.png","Status":1},{"Id":200,"MasterBrokerId":1601,"BrokerName":"Halifax","BrokerFullName":"MetaTrader 4 - Halifax Pro","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180615165800370.png","Status":1},{"Id":201,"MasterBrokerId":2359,"BrokerName":"TBC海湾资本","BrokerFullName":"TBC MT4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180615191245677.png","Status":1},{"Id":203,"MasterBrokerId":1793,"BrokerName":"Formax","BrokerFullName":"Formax Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180623102025482.png","Status":1},{"Id":204,"MasterBrokerId":2420,"BrokerName":"Myfx Markets","BrokerFullName":"Myfx Markets MetaTrader 4,Myfx Markets","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180625113718197.png","Status":1},{"Id":205,"MasterBrokerId":1808,"BrokerName":"Koderan International","BrokerFullName":"Koderan MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/6/20180628144348344.png","Status":1},{"Id":206,"MasterBrokerId":2881,"BrokerName":"奥弗国际","BrokerFullName":"Honorfalcon Global MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180702085748145.png","Status":1},{"Id":207,"MasterBrokerId":2758,"BrokerName":"Geedey Capital","BrokerFullName":"Geedey Capital MT4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180704183956827.png","Status":1},{"Id":208,"MasterBrokerId":0,"BrokerName":"TCC","BrokerFullName":"Top Capital Corporation TCC","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180704192148958.png","Status":1},{"Id":209,"MasterBrokerId":2777,"BrokerName":"VT Markets","BrokerFullName":"VT Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180705110423775.png","Status":1},{"Id":210,"MasterBrokerId":1883,"BrokerName":"IFM Trade","BrokerFullName":"IFM Trade","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180710093750585.png","Status":1},{"Id":211,"MasterBrokerId":2036,"BrokerName":"Royal皇家","BrokerFullName":"Royal Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180711194256660.png","Status":1},{"Id":212,"MasterBrokerId":0,"BrokerName":"BLMarketsLtd","BrokerFullName":"BL Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180711195111720.png","Status":1},{"Id":213,"MasterBrokerId":1664,"BrokerName":"Wiston Global","BrokerFullName":"Wiston Global Limited","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180712104742087.png","Status":1},{"Id":214,"MasterBrokerId":2647,"BrokerName":"AisaFX","BrokerFullName":"Aisa International Group MT4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180712105502998.png","Status":1},{"Id":215,"MasterBrokerId":2844,"BrokerName":"CPT Markets","BrokerFullName":"CPT Markets MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180717140426507.png","Status":1},{"Id":216,"MasterBrokerId":2366,"BrokerName":"Wetrade众汇","BrokerFullName":"Wetrade MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180717142856574.png","Status":1},{"Id":217,"MasterBrokerId":2062,"BrokerName":"TigerWit","BrokerFullName":"Tiger Wit- MetaTrader 4","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180720154123954.png","Status":1},{"Id":218,"MasterBrokerId":2466,"BrokerName":"AnzoCapital","BrokerFullName":"Anzo Capital Limited","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/7/20180720155250927.png","Status":1},{"Id":219,"MasterBrokerId":2060,"BrokerName":"CapstoneGlobal","BrokerFullName":"Capstone MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180816155020353.png","Status":1},{"Id":220,"MasterBrokerId":854,"BrokerName":"Blackwell Global","BrokerFullName":"Blackwell Global Trader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180824170121741.png","Status":1},{"Id":221,"MasterBrokerId":3027,"BrokerName":"OxfordForex","BrokerFullName":"OxfordForex MT4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/8/20180828151915550.png","Status":1},{"Id":222,"MasterBrokerId":2799,"BrokerName":"Cardiff Global","BrokerFullName":"Cardiff Global MetaTrader 4 Terminal","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/9/20180913135515381.png","Status":1},{"Id":223,"MasterBrokerId":28,"BrokerName":"OANDA","BrokerFullName":"OANDA - MetaTrader","Logo":"https://gafxchatimage.fx110.com/api/secrecymaster/default/2018/9/20180921212626044.png","Status":1},{"Id":225,"MasterBrokerId":1791,"BrokerName":"Amana Capital阿曼那资本","BrokerFullName":"Amana Capital Trader","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/05/165542669.png","Status":1},{"Id":226,"MasterBrokerId":1789,"BrokerName":"TeraFx特汇","BrokerFullName":"Tera Europe Limited","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/21/144429303.png","Status":1},{"Id":227,"MasterBrokerId":1906,"BrokerName":"Brickhill eX","BrokerFullName":"Brickhill eX","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/22/165144517.png","Status":1},{"Id":229,"MasterBrokerId":3102,"BrokerName":"IRC Groups Limited","BrokerFullName":"MetaTrader 4 IRC Groups","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/105907505.png","Status":1},{"Id":230,"MasterBrokerId":3238,"BrokerName":"IX 证券","BrokerFullName":"IX Securities MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/110427175.png","Status":1},{"Id":231,"MasterBrokerId":3109,"BrokerName":"Gemini Capital Markets","BrokerFullName":"Gemini Capital Markets MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/111643373.png","Status":1},{"Id":233,"MasterBrokerId":1902,"BrokerName":"HotForex","BrokerFullName":"HotForex MetaTrader","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/114425025.png","Status":1},{"Id":234,"MasterBrokerId":1668,"BrokerName":"Pacific Financial Derivatives","BrokerFullName":"MetaTrader 4 Client Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/115550357.png","Status":1},{"Id":235,"MasterBrokerId":1796,"BrokerName":"ETO Markets","BrokerFullName":"ETO Markets","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/120138672.png","Status":1},{"Id":236,"MasterBrokerId":2349,"BrokerName":"INGOT Brokers","BrokerFullName":"Ingot Station","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/134347416.png","Status":1},{"Id":237,"MasterBrokerId":1867,"BrokerName":"Unicorn Finance","BrokerFullName":"Unicorn Finance MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/140434080.png","Status":1},{"Id":238,"MasterBrokerId":2282,"BrokerName":"友邦外汇","BrokerFullName":"Finance Managers MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/140822300.png","Status":1},{"Id":239,"MasterBrokerId":1792,"BrokerName":"AGM Markets","BrokerFullName":"AGM - MetaTrader 4 Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/11/29/145726880.png","Status":1},{"Id":240,"MasterBrokerId":3222,"BrokerName":"山海证券","BrokerFullName":"ZEAL MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/07/095343979.png","Status":1},{"Id":241,"MasterBrokerId":3249,"BrokerName":"GS Deep Ocean PTY LTD","BrokerFullName":"GSDO Group MT4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/08/155736421.png","Status":1},{"Id":242,"MasterBrokerId":159,"BrokerName":"Velocity","BrokerFullName":"Velocity Global MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2018/12/20/134129902.png","Status":1},{"Id":243,"MasterBrokerId":1462,"BrokerName":"BP PRIME","BrokerFullName":"BP Prime MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/02/095415515.png","Status":1},{"Id":244,"MasterBrokerId":1994,"BrokerName":"GCMAsia","BrokerFullName":"GCM Asia MT4 Client Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/07/142244482.png","Status":1},{"Id":245,"MasterBrokerId":140,"BrokerName":"Dukascopy","BrokerFullName":"Dukascopy MetaTrader 4","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/01/14/161414321.png","Status":1},{"Id":246,"MasterBrokerId":3356,"BrokerName":"IFS Markets","BrokerFullName":"IFS Markets - MetaTrader","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/02/15/100612879.png","Status":1},{"Id":247,"MasterBrokerId":2059,"BrokerName":"Tradeview","BrokerFullName":"Tradeview MetaTrader 4 Terminal","Logo":"https://gaimg.fx110.com/upload/images/niu/2019/02/27/164915008.png","Status":1}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.26'>
+    <td class='none'><div class='testcase'>test_api_getHotSearchWordsByType_request_00001_搜索类型为1_默认_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.26')" >
+        通过</a>
+
+    <div id='div_pt1.26' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.26').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.26: http://218.244.157.23:8090/server/api/getHotSearchWordsByType?searchType=1&amp;topSize=9
+{'code': 0, 'message': '操作成功', 'bodyMessage': '["我的","么墨子","A","小法师","H","testniuren","0525","11","小"]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.27'>
+    <td class='none'><div class='testcase'>test_api_getHotSearchWordsByType_request_00002_搜索类型为0_不存在_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.27')" >
+        通过</a>
+
+    <div id='div_pt1.27' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.27').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.27: http://218.244.157.23:8090/server/api/getHotSearchWordsByType?searchType=0&amp;topSize=9
+{'code': 0, 'message': '获取成功,对象为空', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.28'>
+    <td class='none'><div class='testcase'>test_api_getHotSearchWordsByType_request_00003_搜索类型为1_其它_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.28')" >
+        通过</a>
+
+    <div id='div_pt1.28' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.28').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.28: http://218.244.157.23:8090/server/api/getHotSearchWordsByType?searchType=1&amp;topSize=10
+{'code': 0, 'message': '操作成功', 'bodyMessage': '["我的","么墨子","A","小法师","H","testniuren","0525","11","小"]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.29'>
+    <td class='none'><div class='testcase'>test_api_getLever_request_00001_获取成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.29')" >
+        通过</a>
+
+    <div id='div_pt1.29' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.29').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.29: http://218.244.157.23:8090/server/api/getLever
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"id":"5","name":"1:5"},{"id":"10","name":"1:10"},{"id":"20","name":"1:20"},{"id":"25","name":"1:25"},{"id":"30","name":"1:30"},{"id":"33","name":"1:33"},{"id":"40","name":"1:40"},{"id":"50","name":"1:50"},{"id":"66","name":"1:66"},{"id":"100","name":"1:100"},{"id":"125","name":"1:125"},{"id":"150","name":"1:150"},{"id":"200","name":"1:200"},{"id":"300","name":"1:300"},{"id":"400","name":"1:400"},{"id":"500","name":"1:500"},{"id":"600","name":"1:600"},{"id":"888","name":"1:888"},{"id":"1000","name":"1:1000"},{"id":"2000","name":"1:2000"},{"id":"3000","name":"1:3000"}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.30'>
+    <td class='none'><div class='testcase'>test_api_getOrderLogByTickets_request_00001_操作成功_1个订单号_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.30')" >
+        通过</a>
+
+    <div id='div_pt1.30' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.30').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.30: http://218.244.157.23:8090/server/api/getOrderLogByTickets?tickets=5650489
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"Id":42239,"Uid":20163480,"AccountId":4468,"Ticket":"5650489","OrderExchange":1,"Symbol":"GOLD","Lots":0.01,"TradeType":1,"OpenPrice":1248.54000,"ClosePrice":1248.77000,"TP":0.00000,"SL":0.00000,"OpenTime":"2018-12-11 11:56:50","CloseTime":"2018-12-11 11:56:57","Profit":-0.23000,"User":{"Accounts":[],"Uid":20163480,"UserName":"EI2677017","NickName":"0525号小法师","UserHeadImg":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_120":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_48":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png","TradingMaxims":"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言","IsIdentity":0,"NiuAuth":1,"UserCenterImg":null,"UserAuth":{"Niu":1,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4468,"Uid":20163480,"AccountName":"稳健","AccountNumber":60024894,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png","BrokerName":"FXPRO","BrokerServerName":"FxPro.com-Demo06","AccountType":0,"AccountCategory":0,"AuthStatus":1,"AccountStatus":1,"ConnecStatus":4,"RssStatus":1,"Index":2,"Rank":35,"MELevel":5}}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.31'>
+    <td class='none'><div class='testcase'>test_api_getOrderLogByTickets_request_00002_操作成功_2个订单号_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.31')" >
+        通过</a>
+
+    <div id='div_pt1.31' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.31').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.31: http://218.244.157.23:8090/server/api/getOrderLogByTickets?tickets=5650489%2C5650519
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"Id":42246,"Uid":20163480,"AccountId":4468,"Ticket":"5650519","OrderExchange":1,"Symbol":"GOLD","Lots":0.01,"TradeType":1,"OpenPrice":1248.81000,"ClosePrice":1249.05000,"TP":0.00000,"SL":0.00000,"OpenTime":"2018-12-11 12:00:05","CloseTime":"2018-12-11 12:00:07","Profit":-0.24000,"User":{"Accounts":[],"Uid":20163480,"UserName":"EI2677017","NickName":"0525号小法师","UserHeadImg":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_120":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_48":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png","TradingMaxims":"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言","IsIdentity":0,"NiuAuth":1,"UserCenterImg":null,"UserAuth":{"Niu":1,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4468,"Uid":20163480,"AccountName":"稳健","AccountNumber":60024894,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png","BrokerName":"FXPRO","BrokerServerName":"FxPro.com-Demo06","AccountType":0,"AccountCategory":0,"AuthStatus":1,"AccountStatus":1,"ConnecStatus":4,"RssStatus":1,"Index":2,"Rank":35,"MELevel":5}},{"Id":42239,"Uid":20163480,"AccountId":4468,"Ticket":"5650489","OrderExchange":1,"Symbol":"GOLD","Lots":0.01,"TradeType":1,"OpenPrice":1248.54000,"ClosePrice":1248.77000,"TP":0.00000,"SL":0.00000,"OpenTime":"2018-12-11 11:56:50","CloseTime":"2018-12-11 11:56:57","Profit":-0.23000,"User":{"Accounts":[],"Uid":20163480,"UserName":"EI2677017","NickName":"0525号小法师","UserHeadImg":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_120":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_120.png","UserHeadImg_48":"https://testfxchatimage.fx110.com/api/secrecy13/default/2019/1/20190126191000671_60.png","TradingMaxims":"格言格言格言\\n格言格言格言\\n格言格言格言\\n格言格言格言","IsIdentity":0,"NiuAuth":1,"UserCenterImg":null,"UserAuth":{"Niu":1,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4468,"Uid":20163480,"AccountName":"稳健","AccountNumber":60024894,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095739410.png","BrokerName":"FXPRO","BrokerServerName":"FxPro.com-Demo06","AccountType":0,"AccountCategory":0,"AuthStatus":1,"AccountStatus":1,"ConnecStatus":4,"RssStatus":1,"Index":2,"Rank":35,"MELevel":5}}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.32'>
+    <td class='none'><div class='testcase'>test_api_getOrderLogByTickets_request_00003_操作失败_1个错误订单号_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.32')" >
+        通过</a>
+
+    <div id='div_pt1.32' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.32').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.32: http://218.244.157.23:8090/server/api/getOrderLogByTickets?tickets=1
+{'code': 0, 'message': '获取失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.33'>
+    <td class='none'><div class='testcase'>test_api_getOrderLogByTickets_request_00004_操作失败_2个错误订单号_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.33')" >
+        通过</a>
+
+    <div id='div_pt1.33' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.33').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.33: http://218.244.157.23:8090/server/api/getOrderLogByTickets?tickets=1
+{'code': 0, 'message': '获取失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.34'>
+    <td class='failCase'><div class='testcase'>test_api_getOrderPage_request_00001_操作成功_正确的id_订单类型为1_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.34')" >
+        失败</a>
+
+    <div id='div_ft1.34' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.34').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.34: http://218.244.157.23:8090/server/api/getOrderPage?accountId=4912&amp;ticketType=1&amp;pageIndex=1&amp;pageSize=20
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"TotalCount":2748,"TotalPages":138,"PageIndex":1,"PageSize":20,"PlateName":null,"HasPreviousPage":false,"HasNextPage":true,"PageDatas":[{"Id":159921235,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53040300","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.08,"TradeType":1,"OpenPrice":1286.17000,"ClosePrice":1285.14000,"OpenTime":"2019-05-13 15:14:29","CloseTime":"2019-05-16 18:25:42","Profit":8.24000,"Swap":2.90000,"Commission":-0.56000,"NetProfit":8.24000,"TP":1285.16000,"SL":0.00000,"Pips":10.30000,"Result":"","Duration":75.18694,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-16 18:25:42","Margin":0.41157,"PositionMargin":0.00000,"Balance":557.03600,"AccountType":2,"Status":1},{"Id":159920958,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53046997","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.08,"TradeType":1,"OpenPrice":1288.04000,"ClosePrice":1287.41000,"OpenTime":"2019-05-13 15:37:13","CloseTime":"2019-05-16 17:49:14","Profit":5.04000,"Swap":2.90000,"Commission":-0.56000,"NetProfit":5.04000,"TP":1287.41000,"SL":0.00000,"Pips":6.30000,"Result":"","Duration":74.20028,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-16 17:49:14","Margin":0.41217,"PositionMargin":0.00000,"Balance":546.45600,"AccountType":2,"Status":1},{"Id":159919071,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53262357","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1297.66000,"ClosePrice":1296.04000,"OpenTime":"2019-05-15 14:44:07","CloseTime":"2019-05-15 17:30:44","Profit":16.20000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":16.20000,"TP":1296.06000,"SL":0.00000,"Pips":16.20000,"Result":"","Duration":2.77694,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-15 17:30:44","Margin":0.51906,"PositionMargin":0.00000,"Balance":539.07600,"AccountType":2,"Status":1},{"Id":159901378,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53213269","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1297.73000,"ClosePrice":1296.73000,"OpenTime":"2019-05-15 03:35:07","CloseTime":"2019-05-15 05:03:02","Profit":10.00000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":10.00000,"TP":1291.00000,"SL":0.00000,"Pips":10.00000,"Result":"","Duration":1.46528,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-15 05:03:02","Margin":0.51909,"PositionMargin":0.00000,"Balance":523.57600,"AccountType":2,"Status":1},{"Id":159901004,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53070341","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1296.50000,"ClosePrice":1295.29000,"OpenTime":"2019-05-13 17:11:46","CloseTime":"2019-05-14 18:31:52","Profit":12.10000,"Swap":0.73000,"Commission":-0.70000,"NetProfit":12.10000,"TP":1295.29000,"SL":0.00000,"Pips":12.10000,"Result":"","Duration":25.33500,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-14 18:31:52","Margin":0.51860,"PositionMargin":0.00000,"Balance":514.27600,"AccountType":2,"Status":1},{"Id":159900996,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53181810","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1299.07000,"ClosePrice":1297.96000,"OpenTime":"2019-05-14 16:27:09","CloseTime":"2019-05-14 16:57:14","Profit":11.10000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":11.10000,"TP":1297.98000,"SL":0.00000,"Pips":11.10000,"Result":"","Duration":0.50139,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-14 16:57:14","Margin":0.51963,"PositionMargin":0.00000,"Balance":502.14600,"AccountType":2,"Status":1},{"Id":159900989,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53071873","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1297.29000,"ClosePrice":1296.23000,"OpenTime":"2019-05-13 17:26:37","CloseTime":"2019-05-14 14:14:47","Profit":10.60000,"Swap":0.73000,"Commission":-0.70000,"NetProfit":10.60000,"TP":1296.28000,"SL":0.00000,"Pips":10.60000,"Result":"","Duration":20.80278,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-14 14:14:47","Margin":0.51892,"PositionMargin":0.00000,"Balance":491.74600,"AccountType":2,"Status":1},{"Id":159900573,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53057729","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1296.63000,"ClosePrice":1295.97000,"OpenTime":"2019-05-13 16:15:39","CloseTime":"2019-05-13 17:11:07","Profit":6.60000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":6.60000,"TP":1294.65000,"SL":0.00000,"Pips":6.60000,"Result":"","Duration":0.92444,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-13 17:11:07","Margin":0.51865,"PositionMargin":0.00000,"Balance":481.11600,"AccountType":2,"Status":1},{"Id":159900572,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53067389","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1297.27000,"ClosePrice":1296.72000,"OpenTime":"2019-05-13 17:00:21","CloseTime":"2019-05-13 17:08:51","Profit":5.50000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":5.50000,"TP":1296.23000,"SL":0.00000,"Pips":5.50000,"Result":"","Duration":0.14167,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-13 17:08:51","Margin":0.51891,"PositionMargin":0.00000,"Balance":475.21600,"AccountType":2,"Status":1},{"Id":159900569,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"53063252","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.01,"TradeType":1,"OpenPrice":1298.01000,"ClosePrice":1296.96000,"OpenTime":"2019-05-13 16:37:41","CloseTime":"2019-05-13 17:00:34","Profit":1.05000,"Swap":0.00000,"Commission":-0.07000,"NetProfit":1.05000,"TP":1295.81000,"SL":0.00000,"Pips":10.50000,"Result":"","Duration":0.38139,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-13 17:00:34","Margin":0.05192,"PositionMargin":0.00000,"Balance":470.41600,"AccountType":2,"Status":1},{"Id":159900384,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52919562","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1283.53000,"ClosePrice":1283.44000,"OpenTime":"2019-05-10 09:50:08","CloseTime":"2019-05-13 09:30:56","Profit":0.90000,"Swap":0.73000,"Commission":-0.70000,"NetProfit":0.90000,"TP":1282.00000,"SL":0.00000,"Pips":0.90000,"Result":"","Duration":71.68000,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-13 09:30:56","Margin":0.51341,"PositionMargin":0.00000,"Balance":469.43600,"AccountType":2,"Status":1},{"Id":159900369,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52945071","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1285.76000,"ClosePrice":1285.00000,"OpenTime":"2019-05-10 15:21:44","CloseTime":"2019-05-13 05:00:19","Profit":7.60000,"Swap":0.73000,"Commission":-0.70000,"NetProfit":7.60000,"TP":1285.00000,"SL":0.00000,"Pips":7.60000,"Result":"","Duration":61.64306,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-13 05:00:19","Margin":0.51430,"PositionMargin":0.00000,"Balance":468.50600,"AccountType":2,"Status":1},{"Id":159900366,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52990874","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.08,"TradeType":1,"OpenPrice":1287.61000,"ClosePrice":1286.88000,"OpenTime":"2019-05-13 02:00:32","CloseTime":"2019-05-13 04:13:08","Profit":5.84000,"Swap":0.00000,"Commission":-0.56000,"NetProfit":5.84000,"TP":1286.88000,"SL":0.00000,"Pips":7.30000,"Result":"","Duration":2.21000,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-13 04:13:08","Margin":0.41204,"PositionMargin":0.00000,"Balance":460.87600,"AccountType":2,"Status":1},{"Id":159898991,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52971840","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1287.24000,"ClosePrice":1286.00000,"OpenTime":"2019-05-10 18:28:40","CloseTime":"2019-05-10 21:40:09","Profit":12.40000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":12.40000,"TP":1286.00000,"SL":0.00000,"Pips":12.40000,"Result":"","Duration":3.19139,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-10 21:40:09","Margin":0.51490,"PositionMargin":0.00000,"Balance":455.59600,"AccountType":2,"Status":1},{"Id":159898982,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52971829","SymbolCN":null,"Symbol":"USDJPY","TradeDishType":1,"PriceLength":3,"Lots":0.10,"TradeType":0,"OpenPrice":109.65900,"ClosePrice":109.70100,"OpenTime":"2019-05-10 18:28:17","CloseTime":"2019-05-10 19:34:08","Profit":3.83000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":3.83000,"TP":109.70000,"SL":0.00000,"Pips":4.20000,"Result":"","Duration":1.09750,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-10 19:34:08","Margin":0.00060,"PositionMargin":0.00000,"Balance":443.89600,"AccountType":2,"Status":1},{"Id":159898966,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52948712","SymbolCN":null,"Symbol":"USDCAD","TradeDishType":1,"PriceLength":5,"Lots":0.10,"TradeType":0,"OpenPrice":1.34133,"ClosePrice":1.34220,"OpenTime":"2019-05-10 15:36:06","CloseTime":"2019-05-10 17:49:53","Profit":6.48000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":6.48000,"TP":1.34220,"SL":0.00000,"Pips":8.70000,"Result":"","Duration":2.22972,"Comment":"[tp]","OrderExchange":1,"ServerTime":"2019-05-10 17:49:53","Margin":0.00100,"PositionMargin":0.00000,"Balance":440.76600,"AccountType":2,"Status":1},{"Id":159898956,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52948928","SymbolCN":null,"Symbol":"USDCAD","TradeDishType":1,"PriceLength":5,"Lots":0.10,"TradeType":0,"OpenPrice":1.34057,"ClosePrice":1.34086,"OpenTime":"2019-05-10 15:37:14","CloseTime":"2019-05-10 17:19:38","Profit":2.16000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":2.16000,"TP":1.34123,"SL":0.00000,"Pips":2.90000,"Result":"","Duration":1.70667,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-10 17:19:38","Margin":0.00100,"PositionMargin":0.00000,"Balance":434.98600,"AccountType":2,"Status":1},{"Id":159898955,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52952123","SymbolCN":null,"Symbol":"USDCAD","TradeDishType":1,"PriceLength":5,"Lots":0.10,"TradeType":0,"OpenPrice":1.33948,"ClosePrice":1.34095,"OpenTime":"2019-05-10 15:52:38","CloseTime":"2019-05-10 17:17:10","Profit":10.96000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":10.96000,"TP":1.34123,"SL":0.00000,"Pips":14.70000,"Result":"","Duration":1.40889,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-10 17:17:10","Margin":0.00100,"PositionMargin":0.00000,"Balance":433.52600,"AccountType":2,"Status":1},{"Id":159898941,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52949880","SymbolCN":null,"Symbol":"XAUUSD","TradeDishType":1,"PriceLength":2,"Lots":0.10,"TradeType":1,"OpenPrice":1288.29000,"ClosePrice":1287.83000,"OpenTime":"2019-05-10 15:41:42","CloseTime":"2019-05-10 15:49:07","Profit":4.60000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":4.60000,"TP":1287.07000,"SL":0.00000,"Pips":4.60000,"Result":"","Duration":0.12361,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-10 15:49:07","Margin":0.51532,"PositionMargin":0.00000,"Balance":423.26600,"AccountType":2,"Status":1},{"Id":159898940,"Uid":20162846,"AccountId":4912,"TicketType":1,"Ticket":"52950966","SymbolCN":null,"Symbol":"USDCAD","TradeDishType":1,"PriceLength":5,"Lots":0.10,"TradeType":0,"OpenPrice":1.33956,"ClosePrice":1.34030,"OpenTime":"2019-05-10 15:45:56","CloseTime":"2019-05-10 15:48:55","Profit":5.52000,"Swap":0.00000,"Commission":-0.70000,"NetProfit":5.52000,"TP":1.34100,"SL":0.00000,"Pips":7.40000,"Result":"","Duration":0.04972,"Comment":"","OrderExchange":1,"ServerTime":"2019-05-10 15:48:55","Margin":0.00100,"PositionMargin":0.00000,"Balance":419.36600,"AccountType":2,"Status":1}]}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 307, in test_api_getOrderPage_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"TotalCount":2748,"TotalPages":138,"PageIndex":1,"PageSiz[12030 chars]1}]}' != '{"TotalCount":2746,"TotalPages":138,"PageIndex":1,"PageSiz[12001 chars]1}]}'
+Diff is 24162 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.35'>
+    <td class='failCase'><div class='testcase'>test_api_getOrderPage_request_00002_操作成功_正确的id_订单类型为3_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.35')" >
+        失败</a>
+
+    <div id='div_ft1.35' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.35').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.35: http://218.244.157.23:8090/server/api/getOrderPage?accountId=4912&amp;ticketType=3&amp;pageIndex=1&amp;pageSize=20
+{'code': 0, 'message': '查询失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 307, in test_api_getOrderPage_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{}' != '{"TotalCount":2,"TotalPages":1,"PageIndex"[1256 chars]0}]}'
+Diff is 1311 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.36'>
+    <td class='none'><div class='testcase'>test_api_getOrderPage_request_00003_操作成功_正确的id_订单类型为4_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.36')" >
+        通过</a>
+
+    <div id='div_pt1.36' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.36').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.36: http://218.244.157.23:8090/server/api/getOrderPage?accountId=4912&amp;ticketType=4&amp;pageIndex=1&amp;pageSize=20
+{'code': 0, 'message': '查询失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.37'>
+    <td class='none'><div class='testcase'>test_api_getOrderPage_request_00004_操作成功_错误的id_订单类型为1_case04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.37')" >
+        通过</a>
+
+    <div id='div_pt1.37' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.37').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.37: http://218.244.157.23:8090/server/api/getOrderPage?accountId=50&amp;ticketType=1&amp;pageIndex=1&amp;pageSize=20
+{'code': 0, 'message': '查询失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.38'>
+    <td class='none'><div class='testcase'>test_api_getPermissions_request_00001_获取成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.38')" >
+        通过</a>
+
+    <div id='div_pt1.38' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.38').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.38: http://218.244.157.23:8090/server/api/getPermissions
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"dictionaryid":248,"dictionarytypeid":2,"dictionaryvalue":"订单号","dictionaryvalueid":"ticket","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":249,"dictionarytypeid":2,"dictionaryvalue":"手数","dictionaryvalueid":"lots","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":250,"dictionarytypeid":2,"dictionaryvalue":"开仓时间","dictionaryvalueid":"opentime","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":251,"dictionarytypeid":2,"dictionaryvalue":"开仓价","dictionaryvalueid":"openprice","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":252,"dictionarytypeid":2,"dictionaryvalue":"当前价","dictionaryvalueid":"closeprice","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":253,"dictionarytypeid":2,"dictionaryvalue":"止盈","dictionaryvalueid":"tp","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":254,"dictionarytypeid":2,"dictionaryvalue":"止损","dictionaryvalueid":"sl","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":255,"dictionarytypeid":2,"dictionaryvalue":"手续费","dictionaryvalueid":"commission","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":256,"dictionarytypeid":2,"dictionaryvalue":"利息","dictionaryvalueid":"swap","dictionaryalias":null,"dictionaryrgb":null},{"dictionaryid":257,"dictionarytypeid":2,"dictionaryvalue":"获利","dictionaryvalueid":"profit","dictionaryalias":null,"dictionaryrgb":null}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.39'>
+    <td class='none'><div class='testcase'>test_api_getPositionOrderPage_request_00001_查询失败_对象为空_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.39')" >
+        通过</a>
+
+    <div id='div_pt1.39' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.39').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.39: http://218.244.157.23:8090/server/api/getPositionOrderPage?accountId=4912&amp;snapTimeTicks=300&amp;pageIndex=1&amp;pageSize=5
+{'code': 0, 'message': '查询失败，对象为空', 'bodyMessage': '{}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.40'>
+    <td class='failCase'><div class='testcase'>test_api_getProfitShareById_request_00001_查询成功_正确的ID_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.40')" >
+        失败</a>
+
+    <div id='div_ft1.40' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.40').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.40: http://218.244.157.23:8090/server/api/getProfitShareById?accountId=4912&amp;uid=20162846
+{'code': 0, 'message': '查询成功', 'bodyMessage': '{"AccountId":4912,"ClosedPL":0.0,"ClosedPLContent":"","ExContent":"","ExPosition":0,"Lots":0.0,"LotsContent":"","Orders":0,"OrdersContent":"","PLRate":0.0,"PLRateContent":"","RealAccount":{"AccountId":4912,"Balance":557.03000,"Equity":557.03000,"FloatProfit":0.00000,"FreeMargin":557.03000,"Id":192935513,"Margin":0.00000,"MarginRate":557.0300},"SnapTimeTicks":0,"TotalClosedPL":-1124.09,"Uid":20162846,"User":{"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"}}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 149, in test_api_getProfitShareById_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[20 chars]dPL":0.0,"ClosedPLContent":"","ExContent":"","[791 chars]2"}}' != '{"Ac[20 chars]dPL":-172.04,"ClosedPLContent":"","ExContent":[810 chars]2"}}'
+Diff is 2681 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.41'>
+    <td class='failCase'><div class='testcase'>test_api_getProfitShareById_request_00002_查询成功_错误的ID_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.41')" >
+        失败</a>
+
+    <div id='div_ft1.41' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.41').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.41: http://218.244.157.23:8090/server/api/getProfitShareById?accountId=50&amp;uid=20162846
+{'code': 0, 'message': '查询成功', 'bodyMessage': '{"AccountId":50,"ClosedPL":0.0,"ClosedPLContent":"","ExContent":"","ExPosition":0,"Lots":0.0,"LotsContent":"","Orders":0,"OrdersContent":"","PLRate":0.0,"PLRateContent":"","RealAccount":{"AccountId":0,"Balance":0.0,"Equity":0.0,"FloatProfit":0.0,"FreeMargin":0.0,"Id":0,"Margin":0.0,"MarginRate":0.0},"SnapTimeTicks":0,"TotalClosedPL":0.0,"Uid":20162846,"User":{"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"}}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 149, in test_api_getProfitShareById_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"Ac[336 chars]Uid":20162846,"User":{"IsIdentity":0,"NickName[426 chars]2"}}' != '{"Ac[336 chars]Uid":5079}'
+Diff is 1173 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.42'>
+    <td class='failCase'><div class='testcase'>test_api_getRealStatisTinys_request_00001_操作成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.42')" >
+        失败</a>
+
+    <div id='div_ft1.42' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.42').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.42: http://218.244.157.23:8090/server/api/getRealStatisTinys?uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"User":{"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","AccountType":2,"AccountStatus":1,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"Id":3317344,"Uid":20162846,"AccountId":4911,"ClosePL":0.0,"ProfitRate":-35.14,"WinRate":77.04,"RetractRate":98.02,"TotalClosePL":-58513.68},{"User":{"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","AccountType":2,"AccountStatus":1,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"Id":3317349,"Uid":20162846,"AccountId":4912,"ClosePL":0.0,"ProfitRate":-16.43,"WinRate":85.62,"RetractRate":0.00,"TotalClosePL":-1124.09},{"User":{"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4913,"Uid":20162846,"AccountNumber":200095065,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","AccountType":2,"AccountStatus":0,"RssStatus":0,"Index":3,"Rank":0,"MELevel":5},"Id":3317359,"Uid":20162846,"AccountId":4913,"ClosePL":0.0,"ProfitRate":8.62,"WinRate":61.71,"RetractRate":0.00,"TotalClosePL":3759.84}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 161, in test_api_getRealStatisTinys_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"U[56 chars]whiteww12345","UserHeadImg":"https://fxchatima[2369 chars]84}]' != '[{"U[56 chars]whiteTTT111","UserHeadImg":"https://fxchatimag[2368 chars]84}]'
+Diff is 9877 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.43'>
+    <td class='none'><div class='testcase'>test_api_getRealStatisTinys_request_00002_操作失败_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.43')" >
+        通过</a>
+
+    <div id='div_pt1.43' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.43').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.43: http://218.244.157.23:8090/server/api/getRealStatisTinys?uid=2016431
+{'code': 0, 'message': '查询失败，对象为空', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.44'>
+    <td class='failCase'><div class='testcase'>test_api_getSmallAccountByIds_request_00001_操作成功_1个id_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.44')" >
+        失败</a>
+
+    <div id='div_ft1.44' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.44').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.44: http://218.244.157.23:8090/server/api/getSmallAccountByIds?accountIds=4912
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"User":{"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 333, in test_api_getSmallAccountByIds_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"U[726 chars]onnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4}]' != '[{"U[726 chars]onnecStatus":4,"RssStatus":0,"Index":2,"Rank":42,"MELevel":4}]'
+Diff is 3153 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.45'>
+    <td class='failCase'><div class='testcase'>test_api_getSmallAccountByIds_request_00002_操作成功_2个id_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.45')" >
+        失败</a>
+
+    <div id='div_ft1.45' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.45').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.45: http://218.244.157.23:8090/server/api/getSmallAccountByIds?accountIds=4912%2C5307
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"User":{"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},{"User":{"Uid":20165656,"UserName":"BX2795115","NickName":"0527","UserHeadImg":"https://fxchatimage.fx110.com/headdefault/41_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault/41_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault/41_60.jpg","TradingMaxims":"","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"AccountId":5307,"Uid":20165656,"AccountName":"熊","AccountNumber":936233,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":1,"Index":1,"Rank":10,"MELevel":3}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 333, in test_api_getSmallAccountByIds_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"U[768 chars]nk":40,"MELevel":4},{"User":{"Uid":20165656,"U[728 chars]:3}]' != '[{"U[768 chars]nk":42,"MELevel":4},{"User":{"Uid":20165656,"U[728 chars]:3}]'
+Diff is 4669 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.46'>
+    <td class='none'><div class='testcase'>test_api_getSmallAccountByIds_request_00003_操作失败_1个错误的id_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.46')" >
+        通过</a>
+
+    <div id='div_pt1.46' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.46').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.46: http://218.244.157.23:8090/server/api/getSmallAccountByIds?accountIds=12
+{'code': 0, 'message': '获取失败，对象为空', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.47'>
+    <td class='failCase'><div class='testcase'>test_api_getStatisByUid_request_00001_操作成功_正确的id_统计类别为0_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.47')" >
+        失败</a>
+
+    <div id='div_ft1.47' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.47').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.47: http://218.244.157.23:8090/server/api/getStatisByUid?uid=20162846&amp;currentUid=20163773&amp;statisType=0
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"XAxisOverviewsSmall":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.86,-1348.06,-1330.10],"YAxisOverviewsSmall":["2019-05-08 00:00:00","2019-05-09 00:00:00","2019-05-10 00:00:00","2019-05-13 00:00:00","2019-05-14 00:00:00","2019-05-15 00:00:00","2019-05-16 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"StatisType":0,"Id":3317349,"Uid":20162846,"AccountId":4912,"FloatRank":0,"FocusSymbol":"XAUUSD","IntoBalance":4261.12,"ClosedPL":-1124.09,"Balance":557.04,"ProfitRate":-16.43,"WinRate":85.62,"RetractRate":0.00,"AvgDuration":17.66731,"TotalProfit":-1124.09},{"XAxisOverviewsSmall":[1281.90,-954.68,-2493.88,-2478.31,370.26,-750.00,-1814.95],"YAxisOverviewsSmall":["2018-09-12 00:00:00","2018-09-13 00:00:00","2018-09-14 00:00:00","2018-09-17 00:00:00","2018-09-18 00:00:00","2018-09-19 00:00:00","2018-09-20 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"StatisType":0,"Id":3317344,"Uid":20162846,"AccountId":4911,"FloatRank":0,"FocusSymbol":"GBPUSD","IntoBalance":112520.00,"ClosedPL":-58513.68,"Balance":6.32,"ProfitRate":-35.14,"WinRate":77.04,"RetractRate":98.02,"AvgDuration":6.04343,"TotalProfit":-58513.68}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 345, in test_api_getStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"X[18 chars]":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.8[2604 chars]68}]' != '[{"X[18 chars]":[-1549.62,-1495.19,-1486.50,-1431.54,-1406.0[2605 chars]68}]'
+Diff is 10171 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.48'>
+    <td class='failCase'><div class='testcase'>test_api_getStatisByUid_request_00002_操作成功_正确的id_统计类别为1_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.48')" >
+        失败</a>
+
+    <div id='div_ft1.48' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.48').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.48: http://218.244.157.23:8090/server/api/getStatisByUid?uid=20162846&amp;currentUid=20163773&amp;statisType=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"XAxisOverviewsSmall":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.86,-1348.06,-1330.10],"YAxisOverviewsSmall":["2019-05-08 00:00:00","2019-05-09 00:00:00","2019-05-10 00:00:00","2019-05-13 00:00:00","2019-05-14 00:00:00","2019-05-15 00:00:00","2019-05-16 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"StatisType":1,"Id":3317350,"Uid":20162846,"AccountId":4912,"FloatRank":0,"FocusSymbol":"","IntoBalance":0.00,"ClosedPL":0.00,"Balance":0.00,"ProfitRate":0.00,"WinRate":0.00,"RetractRate":0.00,"AvgDuration":0.00000,"TotalProfit":0.00},{"XAxisOverviewsSmall":[1281.90,-954.68,-2493.88,-2478.31,370.26,-750.00,-1814.95],"YAxisOverviewsSmall":["2018-09-12 00:00:00","2018-09-13 00:00:00","2018-09-14 00:00:00","2018-09-17 00:00:00","2018-09-18 00:00:00","2018-09-19 00:00:00","2018-09-20 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"StatisType":1,"Id":3317345,"Uid":20162846,"AccountId":4911,"FloatRank":0,"FocusSymbol":"","IntoBalance":0.00,"ClosedPL":0.00,"Balance":0.00,"ProfitRate":0.00,"WinRate":0.00,"RetractRate":0.00,"AvgDuration":0.00000,"TotalProfit":0.00}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 345, in test_api_getStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"X[18 chars]":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.8[2556 chars]00}]' != '[{"X[18 chars]":[-1549.62,-1495.19,-1486.50,-1431.54,-1406.0[2556 chars]00}]'
+Diff is 10027 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.49'>
+    <td class='failCase'><div class='testcase'>test_api_getStatisByUid_request_00003_操作成功_正确的id_统计类别为2_case03</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.49')" >
+        失败</a>
+
+    <div id='div_ft1.49' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.49').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.49: http://218.244.157.23:8090/server/api/getStatisByUid?uid=20162846&amp;currentUid=20163773&amp;statisType=2
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"XAxisOverviewsSmall":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.86,-1348.06,-1330.10],"YAxisOverviewsSmall":["2019-05-08 00:00:00","2019-05-09 00:00:00","2019-05-10 00:00:00","2019-05-13 00:00:00","2019-05-14 00:00:00","2019-05-15 00:00:00","2019-05-16 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"StatisType":2,"Id":3317351,"Uid":20162846,"AccountId":4912,"FloatRank":0,"FocusSymbol":"XAUUSD","IntoBalance":0.00,"ClosedPL":156.40,"Balance":400.64,"ProfitRate":39.04,"WinRate":92.31,"RetractRate":0.00,"AvgDuration":18.56518,"TotalProfit":156.40},{"XAxisOverviewsSmall":[1281.90,-954.68,-2493.88,-2478.31,370.26,-750.00,-1814.95],"YAxisOverviewsSmall":["2018-09-12 00:00:00","2018-09-13 00:00:00","2018-09-14 00:00:00","2018-09-17 00:00:00","2018-09-18 00:00:00","2018-09-19 00:00:00","2018-09-20 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"StatisType":2,"Id":3317346,"Uid":20162846,"AccountId":4911,"FloatRank":0,"FocusSymbol":"","IntoBalance":0.00,"ClosedPL":0.00,"Balance":0.00,"ProfitRate":0.00,"WinRate":0.00,"RetractRate":0.00,"AvgDuration":0.00000,"TotalProfit":0.00}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 345, in test_api_getStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"X[18 chars]":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.8[2571 chars]00}]' != '[{"X[18 chars]":[-1549.62,-1495.19,-1486.50,-1431.54,-1406.0[2571 chars]00}]'
+Diff is 10087 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.50'>
+    <td class='failCase'><div class='testcase'>test_api_getStatisByUid_request_00004_操作成功_正确的id_统计类别为3_case04</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.50')" >
+        失败</a>
+
+    <div id='div_ft1.50' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.50').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.50: http://218.244.157.23:8090/server/api/getStatisByUid?uid=20162846&amp;currentUid=20163773&amp;statisType=3
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"XAxisOverviewsSmall":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.86,-1348.06,-1330.10],"YAxisOverviewsSmall":["2019-05-08 00:00:00","2019-05-09 00:00:00","2019-05-10 00:00:00","2019-05-13 00:00:00","2019-05-14 00:00:00","2019-05-15 00:00:00","2019-05-16 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"StatisType":3,"Id":3317352,"Uid":20162846,"AccountId":4912,"FloatRank":0,"FocusSymbol":"XAUUSD","IntoBalance":445.90,"ClosedPL":-203.16,"Balance":314.30,"ProfitRate":-6.08,"WinRate":88.61,"RetractRate":0.00,"AvgDuration":17.19502,"TotalProfit":-203.16},{"XAxisOverviewsSmall":[1281.90,-954.68,-2493.88,-2478.31,370.26,-750.00,-1814.95],"YAxisOverviewsSmall":["2018-09-12 00:00:00","2018-09-13 00:00:00","2018-09-14 00:00:00","2018-09-17 00:00:00","2018-09-18 00:00:00","2018-09-19 00:00:00","2018-09-20 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"StatisType":3,"Id":3317347,"Uid":20162846,"AccountId":4911,"FloatRank":0,"FocusSymbol":"","IntoBalance":0.00,"ClosedPL":0.00,"Balance":0.00,"ProfitRate":0.00,"WinRate":0.00,"RetractRate":0.00,"AvgDuration":0.00000,"TotalProfit":0.00}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 345, in test_api_getStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"X[18 chars]":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.8[2575 chars]00}]' != '[{"X[18 chars]":[-1549.62,-1495.19,-1486.50,-1431.54,-1406.0[2574 chars]00}]'
+Diff is 10101 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.51'>
+    <td class='failCase'><div class='testcase'>test_api_getStatisByUid_request_00005_操作成功_正确的id_统计类别为4_case05</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.51')" >
+        失败</a>
+
+    <div id='div_ft1.51' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.51').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.51: http://218.244.157.23:8090/server/api/getStatisByUid?uid=20162846&amp;currentUid=20163773&amp;statisType=4
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"XAxisOverviewsSmall":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.86,-1348.06,-1330.10],"YAxisOverviewsSmall":["2019-05-08 00:00:00","2019-05-09 00:00:00","2019-05-10 00:00:00","2019-05-13 00:00:00","2019-05-14 00:00:00","2019-05-15 00:00:00","2019-05-16 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4912,"Uid":20162846,"AccountName":"922290","AccountNumber":922290,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png","BrokerName":"IC Markets","BrokerServerName":"ICMarkets-Live08","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":2,"Rank":40,"MELevel":4},"StatisType":4,"Id":3317353,"Uid":20162846,"AccountId":4912,"FloatRank":0,"FocusSymbol":"XAUUSD","IntoBalance":3496.37,"ClosedPL":-1765.78,"Balance":406.45,"ProfitRate":-36.02,"WinRate":87.47,"RetractRate":0.00,"AvgDuration":15.58965,"TotalProfit":-1765.78},{"XAxisOverviewsSmall":[1281.90,-954.68,-2493.88,-2478.31,370.26,-750.00,-1814.95],"YAxisOverviewsSmall":["2018-09-12 00:00:00","2018-09-13 00:00:00","2018-09-14 00:00:00","2018-09-17 00:00:00","2018-09-18 00:00:00","2018-09-19 00:00:00","2018-09-20 00:00:00"],"User":{"Accounts":null,"Uid":20162846,"UserName":"XD2450022","NickName":"whiteww12345","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","TradingMaxims":"娃哈哈哈哈","IsIdentity":0,"NiuAuth":0,"UserCenterImg":null,"UserAuth":{"Niu":0,"KB":0,"ID":0,"BU":0}},"Account":{"AccountId":4911,"Uid":20162846,"AccountName":"200117322","AccountNumber":200117322,"BrokerLogo":"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png","BrokerName":"USGFX","BrokerServerName":"USGFX-Live2","AccountType":2,"AccountCategory":0,"AuthStatus":3,"AccountStatus":1,"ConnecStatus":4,"RssStatus":0,"Index":1,"Rank":54,"MELevel":5},"StatisType":4,"Id":3317348,"Uid":20162846,"AccountId":4911,"FloatRank":0,"FocusSymbol":"GBPUSD","IntoBalance":112520.00,"ClosedPL":-58513.68,"Balance":6.32,"ProfitRate":-52.00,"WinRate":77.04,"RetractRate":98.02,"AvgDuration":6.04343,"TotalProfit":-58513.68}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 345, in test_api_getStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"X[18 chars]":[-1495.19,-1486.50,-1431.54,-1406.02,-1372.8[2604 chars]68}]' != '[{"X[18 chars]":[-1549.62,-1495.19,-1486.50,-1431.54,-1406.0[2605 chars]68}]'
+Diff is 10171 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.52'>
+    <td class='none'><div class='testcase'>test_api_getStatisPageByUids_request_00001_操作成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.52')" >
+        通过</a>
+
+    <div id='div_pt1.52' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.52').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.52: http://218.244.157.23:8090/server/api/getStatisPageByUids?userKeyWord=111&amp;uid=20163599&amp;accountType=0&amp;pageIndex=1&amp;pageSize=20
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"HasNextPage":false,"HasPreviousPage":false,"PageDatas":[],"PageIndex":0,"PageSize":10,"TotalCount":0,"TotalPages":0}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.53'>
+    <td class='failCase'><div class='testcase'>test_api_getTotalStatisByUid_request_00001_操作成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.53')" >
+        失败</a>
+
+    <div id='div_ft1.53' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.53').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.53: http://218.244.157.23:8090/server/api/getTotalStatisByUid?uid=20162846
+{'code': 0, 'message': '操作成功', 'bodyMessage': '{"TotalClosedPL":"-55.88K","TotalDayClosedPL":"0.00","Uid":20162846,"User":{"Accounts":[{"AccountId":4911,"AccountName":"200117322","AccountType":2,"Index":1,"Uid":20162846},{"AccountId":4912,"AccountName":"922290","AccountType":2,"Index":2,"Uid":20162846},{"AccountId":4913,"AccountName":"200095065","AccountType":2,"Index":3,"Uid":20162846}],"IsIdentity":0,"NickName":"whiteww12345","NiuAuth":1,"TradingMaxims":"娃哈哈哈哈","Uid":20162846,"UserAuth":{"BU":1,"ID":0,"KB":0,"Niu":1},"UserCenterImg":"https://fxchatimage.fx110.com/album/scenery/6.jpg","UserHeadImg":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_120":"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg","UserHeadImg_48":"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg","UserName":"XD2450022"},"subCounts":0}', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 185, in test_api_getTotalStatisByUid_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '{"To[13 chars]"-55.88K","TotalDayClosedPL":"0.00","Uid":2016[745 chars]":0}' != '{"To[13 chars]"-55.90K","TotalDayClosedPL":"0.00","Uid":2016[744 chars]":0}'
+Diff is 2401 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.54'>
+    <td class='none'><div class='testcase'>test_api_getUserNew_request_00001_获取条数为0_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.54')" >
+        通过</a>
+
+    <div id='div_pt1.54' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.54').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.54: http://218.244.157.23:8090/server/api/getUserNew?topSize=0
+{'code': 0, 'message': '参数错误，对象为空', 'bodyMessage': '[]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.55'>
+    <td class='failCase'><div class='testcase'>test_api_getUserNew_request_00002_获取条数为1_case02</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.55')" >
+        失败</a>
+
+    <div id='div_ft1.55' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.55').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.55: http://218.244.157.23:8090/server/api/getUserNew?topSize=1
+{'code': 0, 'message': '操作成功', 'bodyMessage': '[{"closedpl":-190.16,"totalprofit":-190.16,"user":{"accounts":[],"uid":20163759,"username":"rg2854164","nickname":"我的名字叫wy","userheadimg":"https://fxchatimage.fx110.com/headdefault//38_120.jpg","userheadimg_120":"https://fxchatimage.fx110.com/headdefault//38_120.jpg","userheadimg_48":"https://fxchatimage.fx110.com/headdefault//38_60.jpg","tradingmaxims":"’‘༻ི(ؔᵒ̶̷ᵕؔᵒ̷̶)༄୭*ˈ｡◕‿◕｡(ಡωಡ)\\"","isidentity":1,"niuauth":1,"usercenterimg":null,"userauth":{"niu":1,"kb":0,"id":0,"bu":0}},"account":{"accountid":4498,"uid":20163759,"accountname":"svs","accountnumber":100262,"brokerlogo":"https://fxchatimage.fx110.com/api/secrecymaster/default/2017/6/20170620095518175.png","brokername":"svsfx","brokerservername":"svsfx-live","accounttype":2,"accountcategory":0,"authstatus":3,"accountstatus":1,"connecstatus":4,"rssstatus":1,"index":3,"rank":35,"melevel":4}}]', 'subCode': None, 'total': 0, 'pageIndex': 0, 'pageSize': 0}
+Traceback (most recent call last):
+  File "D:\Program Files\Python3\lib\site-packages\ddt.py", line 145, in wrapper
+    return func(self, *args, **kwargs)
+  File "E:\py-working\06.niufx-autotest-api(unintest)\ddtTest.py", line 197, in test_api_getUserNew_request
+    self.assertEqual(self.result['bodyMessage'], bodyMessage)
+AssertionError: '[{"c[789 chars]nnecstatus":4,"rssstatus":1,"index":3,"rank":35,"melevel":4}}]' != '[{"c[789 chars]nnecstatus":4,"rssstatus":1,"index":3,"rank":34,"melevel":4}}]'
+Diff is 3399 characters long. Set self.maxDiff to None to see it.
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.56'>
+    <td class='none'><div class='testcase'>test_api_queryApiCode_request_00001_查询成功_case01</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.56')" >
+        通过</a>
+
+    <div id='div_pt1.56' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.56').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.56: http://218.244.157.23:8090/server/api/queryApiCode
+{'0': '操作成功', '-1': '系统内部异常:', '10060': '账户还没有交易记录，暂不可体检~', '10061': '该时段没有平仓的订单，暂不支持体检~', '10062': '此时段您已进行过交易体检', '-400': '远程API调用异常，请联系管理员:', '10063': '此时间段您已有重复的体检结果', '10064': '全时段已进行过交易体检', '10065': '全时段您已有重复的体检结果', '-601': '账户数量已达4个', '-100': 'API调用过程中条件缺失错误', '-101': 'API调用过程中条件缺失错误:缺失用户ID', '-102': 'API调用过程中条件缺失错误:缺失账户ID', '-103': 'API调用过程中条件缺失错误:交易品种参数错误', '10086': '自定义体检时间有误', '-301': '不能订阅自己', '-302': '该账户品种已订阅，请勿重复操作', '-303': '剩余牛刀不足', '-304': '无订阅信息', '-305': '非交易员账户', '-306': '普通账户订阅数已达5个', '-307': '该账户已设为私密，暂不支持订阅', '-308': '该账户已关闭订阅功能，暂不支持订阅', '-309': '该账户已被删除不再支持订阅', '-310': '该账户已被删除不再支持查看', '-311': '该账户已设为私密，暂不支持查看'}
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>56</td>
+    <td>31</td>
+    <td>25</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<script>
+    drawCircle(31, 25, 0)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

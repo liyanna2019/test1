@@ -1,0 +1,10 @@
+
+#template_name:getSymbolAnyGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getSymbolAnyGapList
+#获取指定账户品种分析图表信息
+test.case01:
+    accountId:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

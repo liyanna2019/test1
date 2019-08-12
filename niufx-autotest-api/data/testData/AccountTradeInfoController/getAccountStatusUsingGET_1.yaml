@@ -1,0 +1,11 @@
+
+#template_name:getAccountStatusUsingGET_1
+#AccountTradeInfoController,get,/api/getAccountStatus
+#根据账户ID判断账户是否可浏览,(在进入用户详情前调用)
+操作成功,正确的uid.case01:
+    uid: 20162846
+    accountId: 4912
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"accountStatus\":1}"
+    subCode: null

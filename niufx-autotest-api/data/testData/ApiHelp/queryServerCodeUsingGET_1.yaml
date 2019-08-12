@@ -1,0 +1,19 @@
+
+#template_name:queryServerCodeUsingGET_1
+#ApiHelp,get,/api/queryServerCode
+#返回CODE代码查询，服务端调用时查询
+查询成功.case01:
+    http_statusCode: 200
+    #recode:
+    #bodyMessage:
+    #subCode:
+    response: {
+      "200": "成功",
+      "20010": "短信发送请求允许",
+      "20011": "短信发送请求不允许",
+      "20020": "短信通知成功",
+      "20021": "短信通知失败",
+      "-20020": "短信通知时内部错误",
+      "-500": "系统内部错误",
+      "-20010": "短信请求发送时内部错误"
+    }

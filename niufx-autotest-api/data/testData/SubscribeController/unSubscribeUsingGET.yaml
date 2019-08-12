@@ -1,0 +1,23 @@
+
+#template_name:unSubscribeUsingGET
+#SubscribeController,get,/api/unSubscribe
+#取消订阅
+取消订阅成功,正确的id.case01:
+    uid: 20165526
+    accountId: 5190
+    symbol: EURAUD
+    unsubscribeUid: 20164933
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: null
+    subCode: null
+
+取消订阅失败,错误的id.case01:
+    uid: 20165526
+    accountId: 4951
+    symbol: EURAUD
+    unsubscribeUid: 20164933
+    http_statusCode: 200
+    recode: -1
+    bodyMessage: null
+    subCode: null

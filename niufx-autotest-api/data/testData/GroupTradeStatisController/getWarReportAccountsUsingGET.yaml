@@ -1,0 +1,12 @@
+
+#template_name:getWarReportAccountsUsingGET
+#GroupTradeStatisController,get,/api/getWarReportAccounts
+#获取指定用户交易战报账户列表信息
+test.case01:
+    uid:
+    reportTime:
+    warType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

@@ -1,0 +1,11 @@
+
+#template_name:getReportByIdUsingGET_1
+#TraderDoctorsController,get,/api/getReportById
+#根据体检报告ID获取报告信息
+test.case01:
+    accountId:
+    id:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

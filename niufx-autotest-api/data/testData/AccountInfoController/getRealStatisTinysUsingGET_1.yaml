@@ -1,0 +1,17 @@
+
+#template_name:getRealStatisTinysUsingGET_1
+#AccountInfoController,get,/api/getRealStatisTinys
+#获取指定用户真实交易账户统计信息
+操作成功.case01:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"User\":{\"Uid\":20162846,\"UserName\":\"XD2450022\",\"NickName\":\"whiteTTT111\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"TradingMaxims\":\"娃哈哈哈哈\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4911,\"Uid\":20162846,\"AccountNumber\":200117322,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png\",\"BrokerName\":\"USGFX\",\"AccountType\":2,\"AccountStatus\":1,\"RssStatus\":0,\"Index\":1,\"Rank\":55,\"MELevel\":5},\"Id\":3317344,\"Uid\":20162846,\"AccountId\":4911,\"ClosePL\":0.0,\"ProfitRate\":-35.14,\"WinRate\":77.04,\"RetractRate\":98.02,\"TotalClosePL\":-58513.68},{\"User\":{\"Uid\":20162846,\"UserName\":\"XD2450022\",\"NickName\":\"whiteTTT111\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"TradingMaxims\":\"娃哈哈哈哈\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4912,\"Uid\":20162846,\"AccountNumber\":922290,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"BrokerName\":\"IC Markets\",\"AccountType\":2,\"AccountStatus\":1,\"RssStatus\":0,\"Index\":2,\"Rank\":41,\"MELevel\":4},\"Id\":3317349,\"Uid\":20162846,\"AccountId\":4912,\"ClosePL\":0.0,\"ProfitRate\":-16.69,\"WinRate\":85.61,\"RetractRate\":94.29,\"TotalClosePL\":-1142.05},{\"User\":{\"Uid\":20162846,\"UserName\":\"XD2450022\",\"NickName\":\"whiteTTT111\",\"UserHeadImg\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_120\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_120.jpg\",\"UserHeadImg_48\":\"https://fxchatimage.fx110.com/headdefault//abbr/1_60.jpg\",\"TradingMaxims\":\"娃哈哈哈哈\",\"IsIdentity\":0,\"NiuAuth\":0,\"UserCenterImg\":null,\"UserAuth\":{\"Niu\":0,\"KB\":0,\"ID\":0,\"BU\":0}},\"Account\":{\"AccountId\":4913,\"Uid\":20162846,\"AccountNumber\":200095065,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095336191.png\",\"BrokerName\":\"USGFX\",\"AccountType\":2,\"AccountStatus\":0,\"RssStatus\":0,\"Index\":3,\"Rank\":0,\"MELevel\":5},\"Id\":3317359,\"Uid\":20162846,\"AccountId\":4913,\"ClosePL\":0.0,\"ProfitRate\":8.62,\"WinRate\":61.71,\"RetractRate\":75.52,\"TotalClosePL\":3759.84}]"
+    subCode: null
+
+操作失败.case02:
+    uid: 2016431
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

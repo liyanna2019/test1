@@ -1,0 +1,21 @@
+
+#template_name:praiseCommentUsingGET
+#CommentReplyController,get,/api/praiseComment
+#根据commentID点赞评论
+操作成功,点赞1.case01:
+    commentId: 1120
+    uid: 20162846
+    type: 1
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null
+
+操作成功,取消点赞0.case01:
+    commentId: 1120
+    uid: 20162846
+    type: 0
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[]"
+    subCode: null

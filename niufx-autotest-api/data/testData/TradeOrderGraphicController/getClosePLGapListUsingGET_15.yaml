@@ -1,0 +1,11 @@
+
+#template_name:getClosePLGapListUsingGET_15
+#TradeOrderGraphicController,get,/api/getClosePLGapList
+#获取指定时间段内账户交易收益概况图表信息
+test.case01:
+    accountId:
+    dateType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

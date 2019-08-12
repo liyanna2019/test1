@@ -1,0 +1,11 @@
+
+#template_name:getClosePLAnyGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getClosePLAnyGapList
+#获取指定账户盈亏分析图表信息
+test.case01:
+    accountId:
+    timeType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

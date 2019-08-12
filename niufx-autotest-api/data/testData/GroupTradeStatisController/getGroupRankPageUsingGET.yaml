@@ -1,0 +1,15 @@
+
+#template_name:getGroupRankPageUsingGET
+#GroupTradeStatisController,get,/api/getGroupRankPage
+#获取群用户交易排行分页
+test.case01:
+    groupId:
+    statisType:
+    sortType:
+    newVersion:
+    pageIndex:
+    pageSize:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

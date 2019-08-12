@@ -1,0 +1,16 @@
+
+#template_name:getReportPageUsingGET_1
+#TraderDoctorsController,get,/api/getReportPage
+#获取体检报告分页,(获取最新的一条报告pageSize传1)
+test.case01:
+    accountId:
+    meTimeSort:
+    scoreRank:
+    startMESTime:
+    endMESTime:
+    pageIndex:
+    pageSize:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

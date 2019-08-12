@@ -1,0 +1,19 @@
+
+#template_name:getAccountTradeRealTimeDataUsingGET_1
+#AccountTradeInfoController,get,/api/getAccountTradeRealTimeData
+#获取指定交易账户详细交易信息实时数据信息(用户详情里的实时变化数据)
+操作成功,正确的id.case01:
+    accountId: 4912
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"Account\":{\"BrokerServerName\":\"ICMarkets-Live08\",\"AccountId\":4912,\"Index\":2,\"Rank\":42,\"AccountCategory\":0,\"ConnecStatus\":4,\"BrokerLogo\":\"https://fxchatimage.fx110.com/api/SecrecyMaster/Default/2017/6/20170620095401566.png\",\"AccountType\":2,\"BrokerName\":\"IC Markets\",\"AccountNumber\":922290,\"MELevel\":4,\"Uid\":20162846,\"AccountStatus\":1,\"LastDate\":\"2019-05-15 22:49:50\",\"AuthStatus\":3,\"RssStatus\":0,\"AccountName\":\"922290\"},\"AccountId\":4912,\"Equity\":433.27000,\"AccountNumber\":922290,\"FreeMargin\":392.08264,\"UId\":20162846,\"Credit\":\"0\",\"FloatProfit\":-105.80000,\"Currency\":\"USD\",\"Leverage\":500,\"Id\":192935513,\"UpdateTimeTicks\":1558006037,\"Balance\":539.07000,\"AccountName\":\"Xu Lu\",\"Margin\":41.18736}"
+    subCode: null
+
+操作成功,不正确的id.case02:
+    accountId: 50
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{\"AccountId\":50,\"Equity\":0.0,\"AccountNumber\":0,\"FreeMargin\":0.0,\"UId\":0,\"Credit\":\"0\",\"FloatProfit\":0.0,\"Leverage\":0,\"Id\":0,\"UpdateTimeTicks\":0,\"Balance\":0.0,\"Margin\":0.0}"
+    subCode: null

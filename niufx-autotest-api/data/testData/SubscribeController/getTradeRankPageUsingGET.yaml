@@ -1,0 +1,21 @@
+
+#template_name:getTradeRankPageUsingGET
+#SubscribeController,get,/api/getTradeRankPage
+#牛人榜排行分页,同时提供排行榜搜索功能
+test.case01:
+    uid: 20163759
+    accountType: 0
+    statisType: 4
+    sortType: 0
+    orderType: 0
+    keyWord: 11
+    activeType: 0
+    brokerIds: 24
+    cycleType: 0
+    meLevel: 0
+    pageIndex: 1
+    pageSize: 20
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

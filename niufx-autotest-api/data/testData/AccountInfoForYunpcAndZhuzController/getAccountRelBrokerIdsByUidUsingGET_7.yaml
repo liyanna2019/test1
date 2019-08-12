@@ -1,0 +1,17 @@
+
+#template_name:getAccountRelBrokerIdsByUidUsingGET_7
+#AccountInfoForYunpcAndZhuzController,get,/api/getAccountRelBrokerIdsByUid
+#查询指定用户ID、交易账户经纪商关联ID集合信息
+操作成功,正确的uid.case01:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "[{\"AccountId\":4911,\"MasterBrokerId\":1156},{\"AccountId\":4912,\"MasterBrokerId\":917},{\"AccountId\":4913,\"MasterBrokerId\":1156}]"
+    subCode: null
+
+获取失败,错误的uid.case02:
+    uid: 20162846
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

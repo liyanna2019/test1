@@ -1,0 +1,11 @@
+
+#template_name:getReportStatusUsingGET
+#TraderDoctorsController,get,/api/getReportStatus
+#根据账户、用户、报告ID查询体检状态，成功将返回体检报告所有内容
+test.case01:
+    accountId:
+    id:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:

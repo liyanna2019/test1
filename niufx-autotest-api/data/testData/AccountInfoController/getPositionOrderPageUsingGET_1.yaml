@@ -1,0 +1,13 @@
+
+#template_name:getPositionOrderPageUsingGET_1
+#AccountInfoController,get,/api/getPositionOrderPage
+#获取今日盈亏持仓快照加载更多信息
+查询失败，对象为空.case01:
+    accountId: 4912
+    snapTimeTicks: 300
+    pageIndex: 1
+    pageSize: 5
+    http_statusCode: 200
+    recode: 0
+    bodyMessage: "{}"
+    subCode: null

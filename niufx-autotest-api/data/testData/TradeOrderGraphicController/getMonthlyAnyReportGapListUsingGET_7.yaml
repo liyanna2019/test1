@@ -1,0 +1,11 @@
+
+#template_name:getMonthlyAnyReportGapListUsingGET_7
+#TradeOrderGraphicController,get,/api/getMonthlyAnyReportGapList
+#获取指定时间段内账户月分析报告图表信息
+test.case01:
+    accountId:
+    dateType:
+    http_statusCode:
+    recode:
+    bodyMessage:
+    subCode:
